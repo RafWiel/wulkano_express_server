@@ -1,0 +1,35 @@
+{
+  "name": "wulkano_express_server",
+  "version": "1.0.0",
+  "description": "Wulkano workshop service",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon --watch src src/app.js --exec \"npm run lint && node\"",
+    "server": "node src/app.js",
+    "lint": "eslint **/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RafWiel/wulkano_express_server.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RafWiel/wulkano_express_server/issues"
+  },
+  "homepage": "https://github.com/RafWiel/wulkano_express_server#readme",
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.3",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.4",
+    "sequelize": "^6.18.0",
+    "sqlite3": "^5.0.2"
+  },
+  "devDependencies": {
+    "eslint": "^8.12.0",
+    "nodemon": "^2.0.15"
+  }
+}

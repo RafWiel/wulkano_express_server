@@ -102,3 +102,10 @@ dist
 
 # TernJS port file
 .tern-port
+
+# Sqlite database files
+*.sqlite*
+wp_workshop.sqlite
+
+#uploads directory
+uploads
