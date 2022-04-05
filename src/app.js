@@ -27,12 +27,12 @@ const isReset = 0;
 sequelize.sync({force: isReset})
 .then(() => {
   app.listen(process.env.PORT || config.port, () => {
-    console.log(`WP Workshop server listening on port ${config.port}`)
+    console.log(`Wulkano Workshop server listening on port ${config.port}`)
 
     //create data for testing
-    if (isReset){
-      require('./database/testDatabase');
-    }
+    // if (isReset){
+    //   require('./database/testDatabase');
+    // }
   });
 });
 

@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) =>
-  sequelize.define('Client', {
+  sequelize.define('DepositTire', {
     depositId: {
       type: DataTypes.INTEGER,
       allowNull: false
