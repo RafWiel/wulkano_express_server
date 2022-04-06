@@ -14,7 +14,7 @@ module.exports = {
       type: QueryTypes.SELECT,
       replacements: { filter: `%${req.query.filter}%` },
     })
-    .then((tasks) => res.send({ tasks }))
+    .then((phoneNumbers) => res.send(phoneNumbers.map(u => u.phoneNumber)))
     .catch((error) => tools.sendError(res, error));
   },
 }
