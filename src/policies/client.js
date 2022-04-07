@@ -12,6 +12,9 @@ module.exports = {
       email: Joi.string().email().allow(null, ''),
     });
 
+    console.log('POLICY');
+    console.log(req.body);
+
     const {error} = schema.validate(req.body.client);
     if (error) {
       switch (error.details[0].context.key) {

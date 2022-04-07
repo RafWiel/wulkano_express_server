@@ -32,6 +32,26 @@ module.exports = (sequelize, DataTypes) =>
       type: DataTypes.STRING(512),
       allowNull: true,
     },
+    tire: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
+    alloy: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
+    steel: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
+    screws: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
+    hubcups: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
   }, {
     timestamps: false
   });

@@ -1,4 +1,5 @@
-//const {Deposit} = require('../models');
+const {Deposit} = require('../models');
+const {DepositTire} = require('../models');
 const {Client} = require('../models');
 const {QueryTypes} = require('sequelize');
 const {sequelize} = require('../models');
@@ -42,22 +43,38 @@ module.exports = {
         });
       }
 
-      res.send({
-        client: {
-          id: client.id
-        },
-      });
+      Deposit.create({
+        clientId: client.id,
+        tiresNote: req.body.tiresNote,
+        tiresLocation: req.body.tiresLocation,
+      })
+      .then((item) => {
+        //add tires
+        req.body.tires.filter(u => u.width && u.profile && u.diameter).forEach((tire) => {
+          DepositTire.create({
+            depositId: item.id,
+            width: tire.width,
+            profile: tire.profile,
+            diameter: tire.diameter,
+            dot: tire.dot,
+            brand: tire.brand,
+            tread: tire.tread,
+            note: tire.note,
+            tire: tire.tire,
+            alloy: tire.alloy,
+            steel: tire.steel,
+            screws: tire.screws,
+            hubcubs: tire.hubcubs
+          })
+          .catch((error) => tools.sendError(res, error));
+        });
 
-      //tutaj depozyt
-      // Deposit.create({
-      //   clientId: client.id,
-      //   tiresNote: req.body.tiresNote,
-      // })
-      // .then((item) => res.send({
-      //   result: true,
-      //   depositId: item.id,
-      // }))
-      // .catch((error) => tools.sendError(res, error));
+        res.send({
+          result: true,
+          depositId: item.id,
+        })
+      })
+      .catch((error) => tools.sendError(res, error));
     }
     catch (error) {
       tools.sendError(res, error);
