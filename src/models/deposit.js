@@ -12,11 +12,15 @@ module.exports = (sequelize, DataTypes) =>
       type: DataTypes.STRING(128),
       allowNull: false,
     },
-    employeeSigntaureFilePath: {
+    directoryId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    employeeSigntaureFileName: {
       type: DataTypes.STRING(128),
       allowNull: false
     },
-    clientSigntaureFilePath: {
+    clientSigntaureFileName: {
       type: DataTypes.STRING(128),
       allowNull: false
     },

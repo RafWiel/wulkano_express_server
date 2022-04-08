@@ -107,5 +107,5 @@ dist
 *.sqlite*
 wp_workshop.sqlite
 
-#uploads directory
-uploads
+#signatures directory
+signatures
