@@ -3,10 +3,9 @@ const {DepositTire} = require('../models');
 const {Client} = require('../models');
 const {QueryTypes} = require('sequelize');
 const {sequelize} = require('../models');
-const tools = require('../misc/tools');
-const fs = require('fs');
 const directoryController = require('../controllers/directory');
-const { randomUUID } = require('crypto');
+const tools = require('../misc/tools');
+const signature = require('../misc/signature');
 
 module.exports = {
   async create (req, res) {
@@ -44,26 +43,19 @@ module.exports = {
         });
       }
 
-      to jako metoda
       //get current month directory
       const directory = await directoryController.getDirectory();
-      const fileName = randomUUID();
-      const clientSignature = req.body.signature.client.replace('data:image/png;base64,','');
 
-      let buffer = new Buffer.from(clientSignature, 'base64');
-      fs.writeFileSync(`${directory.path}${fileName}`, buffer);
-
-      //var writer = fs.createWriteStream('output.txt');
-      //writer.write(clientSignature);
-      //writer.close();
+      const employeeSignatureFileName = signature.save(req.body.signature.employee, directory, res);
+      const clientSignatureFileName = signature.save(req.body.signature.client, directory, res);
 
       Deposit.create({
         clientId: client.id,
         tiresNote: req.body.tiresNote,
         tiresLocation: req.body.tiresLocation,
         directoryId: directory.id,
-        employeeSigntaureFileName: '',
-        clientSigntaureFileName: fileName,
+        employeeSigntaureFileName: employeeSignatureFileName,
+        clientSigntaureFileName: clientSignatureFileName,
       })
       .then((item) => {
         //add tires
