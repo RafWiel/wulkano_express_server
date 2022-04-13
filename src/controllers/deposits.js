@@ -3,9 +3,10 @@ const {DepositTire} = require('../models');
 const {Client} = require('../models');
 const {QueryTypes} = require('sequelize');
 const {sequelize} = require('../models');
-const directoryController = require('../controllers/directory');
+const directoriesController = require('../controllers/directories');
 const tools = require('../misc/tools');
 const signature = require('../misc/signature');
+const { Op } = require('sequelize');
 
 module.exports = {
   async create (req, res) {
@@ -44,12 +45,23 @@ module.exports = {
       }
 
       //get current month directory
-      const directory = await directoryController.getDirectory();
+      const directory = await directoriesController.getDirectory();
 
       const employeeSignatureFileName = signature.save(req.body.signature.employee, directory, res);
       const clientSignatureFileName = signature.save(req.body.signature.client, directory, res);
 
+      // get max ordinal for current month
+      const now = new Date();
+      const dateStartMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+      let ordinal = await Deposit.max('ordinal', {
+        where : {'date': {[Op.gte]: dateStartMonth }}
+      });
+      ordinal = ordinal === null ? 1 : ordinal + 1;
+
       Deposit.create({
+        date: now,
+        ordinal: ordinal,
+        requestName: `D/${ordinal}/${now.getMonth() + 1}/${now.getFullYear().toString().substr(-2)}`,
         clientId: client.id,
         tiresNote: req.body.tiresNote,
         tiresLocation: req.body.tiresLocation,

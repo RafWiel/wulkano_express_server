@@ -1,5 +1,17 @@
 module.exports = (sequelize, DataTypes) =>
   sequelize.define('Deposit', {
+    date: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    ordinal: {
+      type: DataTypes.SMALLINT,
+      allowNull: false
+    },
+    requestName: {
+      type: DataTypes.STRING(32),
+      allowNull: true,
+    },
     clientId: {
       type: DataTypes.INTEGER,
       allowNull: false
