@@ -3,6 +3,8 @@ const {sequelize} = require('../models');
 const tools = require('../misc/tools');
 const requestType = require('../enums/requestType');
 const sortOrder = require('../enums/sortOrder');
+const timePeriod = require('../enums/timePeriod');
+const moment = require('moment');
 
 module.exports = {
   get (req, res) {
@@ -13,10 +15,52 @@ module.exports = {
       console.log('query', req.query);
 
       // sorting columns
-      const sortColumns = ['a.date', 'a.requestName', 'c.name', 'c.companyName', 'c.phoneNumber', 'requestType'];
+      const sortColumns = ['a.date', 'a.requestName', 'clientName', 'c.companyName', 'c.phoneNumber', 'requestType'];
       const sortColumn = req.query['sort-column'] ? sortColumns[req.query['sort-column']] : 'a.date';
       const order = sortOrder.getSqlKeyword(req.query['sort-order']);
 
+      // set filter date
+      let startDate = req.query['start-date'] ? req.query['start-date'] : null;
+      let stopDate = req.query['stop-date'] ? req.query['stop-date'] : null;
+      const now = new Date();
+
+      // set filter predefined date
+      switch(parseInt(req.query['time-period'])) {
+        case timePeriod.currentWeek:
+          startDate = moment(new Date(now.getFullYear(), now.getMonth(), now.getDate()))
+            .subtract(now.getDay() - 1, 'd')
+            .utc()
+            .format('YYYY-MM-DD HH:mm:ss.SSS Z');
+          stopDate = moment(new Date(now.getFullYear(), now.getMonth(), now.getDate()))
+            .subtract(now.getDay() - 1, 'd')
+            .add(7, 'd')
+            .utc()
+            .format('YYYY-MM-DD HH:mm:ss.SSS Z');
+          break;
+        case timePeriod.currentMonth:
+          startDate = moment(new Date(now.getFullYear(), now.getMonth(), 1))
+            .utc()
+            .format('YYYY-MM-DD HH:mm:ss.SSS Z');
+          stopDate = moment(new Date(now.getFullYear(), now.getMonth(), 1))
+            .add(1, 'M')
+            .utc()
+            .format('YYYY-MM-DD HH:mm:ss.SSS Z');
+          break;
+        case timePeriod.previousMonth:
+          startDate = moment(new Date(now.getFullYear(), now.getMonth(), 1))
+            .add(-1, 'M')
+            .utc()
+            .format('YYYY-MM-DD HH:mm:ss.SSS Z');
+          stopDate = moment(new Date(now.getFullYear(), now.getMonth(), 1))
+            .utc()
+            .format('YYYY-MM-DD HH:mm:ss.SSS Z');
+          break;
+        default:
+          break;
+      }
+
+      console.log('type');
+      console.log(req.query.type == requestType.all);
       // run query
       sequelize.query(`
         select
@@ -29,13 +73,27 @@ module.exports = {
           :depositType as requestType
         from Deposits a
         left join Clients c on a.clientId = c.id
+        where (
+          a.requestName like :search or
+          c.name like :search or
+          c.companyName like :search or
+          c.phoneNumber like :search
+        )
+        and case when :startDate is not null then a.date >= :startDate else true end
+        and case when :stopDate is not null then a.date < :stopDate else true end
+        and case when :depositType is not null then a.id is not null else a.id is null end
         order by ${sortColumn} ${order}
         limit 50
         offset :offset
       `, {
         type: QueryTypes.SELECT,
         replacements: {
-          depositType: requestType.deposit,
+          search: req.query.search ? `%${req.query.search}%` : '%%',
+          startDate: startDate ? startDate : null,
+          stopDate: stopDate ? stopDate : null,
+          depositType: !req.query.type
+            || parseInt(req.query.type) === requestType.all
+            || parseInt(req.query.type) === requestType.deposit ? requestType.deposit : null,
           offset: 50 * (page - 1),
         },
       })
