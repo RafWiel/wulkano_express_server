@@ -24,15 +24,35 @@ module.exports = (sequelize, DataTypes) =>
       type: DataTypes.STRING(128),
       allowNull: false,
     },
+    isTires: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
+    isAlloys: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
+    isSteels: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
+    isScrews: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
+    isHubcups: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
     directoryId: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    employeeSigntaureFileName: {
+    employeeSignatureFileName: {
       type: DataTypes.STRING(128),
       allowNull: false
     },
-    clientSigntaureFileName: {
+    clientSignatureFileName: {
       type: DataTypes.STRING(128),
       allowNull: false
     },

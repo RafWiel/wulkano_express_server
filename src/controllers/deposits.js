@@ -11,6 +11,7 @@ const { Op } = require('sequelize');
 module.exports = {
   async create (req, res) {
     try {
+      console.log(req.body);
       const {name, companyName, phoneNumber, email} = req.body.client;
 
       //find client
@@ -63,11 +64,16 @@ module.exports = {
         ordinal: ordinal,
         requestName: `D/${ordinal}/${now.getMonth() + 1}/${now.getFullYear().toString().substr(-2)}`,
         clientId: client.id,
+        isTires: req.body.isTires,
+        isAlloys: req.body.isAlloys,
+        isSteels: req.body.isSteels,
+        isScrews: req.body.isScrews,
+        isHubcups: req.body.isHubcups,
         tiresNote: req.body.tiresNote,
         tiresLocation: req.body.tiresLocation,
         directoryId: directory.id,
-        employeeSigntaureFileName: employeeSignatureFileName,
-        clientSigntaureFileName: clientSignatureFileName,
+        employeeSignatureFileName: employeeSignatureFileName,
+        clientSignatureFileName: clientSignatureFileName,
       })
       .then((item) => {
         //add tires
@@ -81,11 +87,6 @@ module.exports = {
             brand: tire.brand,
             tread: tire.tread,
             note: tire.note,
-            tire: tire.tire,
-            alloy: tire.alloy,
-            steel: tire.steel,
-            screws: tire.screws,
-            hubcubs: tire.hubcubs
           })
           .catch((error) => tools.sendError(res, error));
         });
@@ -98,6 +99,36 @@ module.exports = {
       .catch((error) => tools.sendError(res, error));
     }
     catch (error) {
+      tools.sendError(res, error);
+    }
+  },
+  async getOne (req, res) {
+    try {
+      //get deposit
+      const deposits = await sequelize.query(`
+        select *
+        from Deposits
+        where id = :id
+      `, {
+        type: QueryTypes.SELECT,
+        replacements: { id: req.params.id },
+      });
+
+      const [deposit] = deposits;
+
+      //get client
+      deposit.client = await Client.findOne({
+        where : { id: deposit.clientId },
+      });
+
+      // get tires
+      deposit.tires = await DepositTire.findAll({
+        where : { depositId: deposit.id },
+      })
+
+
+      res.send({ deposit });
+    } catch (error) {
       tools.sendError(res, error);
     }
   },

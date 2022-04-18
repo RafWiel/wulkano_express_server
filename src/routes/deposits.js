@@ -3,5 +3,5 @@ const clientPolicies = require('../policies/clients')
 
 module.exports = (app) => {
   app.post('/deposit', clientPolicies.create, deposits.create);
-
+  app.get('/requests/:id', deposits.getOne);
 }
