@@ -20,9 +20,9 @@ fs.readdirSync(`${__dirname}/routes`)
   });
 
 // db table relations
-//require('./database/tableRelations');
+require('./database/tableRelations');
 
-const isReset = 0;
+const isReset = 1;
 
 sequelize.sync({force: isReset})
 .then(() => {
