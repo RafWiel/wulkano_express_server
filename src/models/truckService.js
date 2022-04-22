@@ -10,15 +10,15 @@ module.exports = (sequelize, DataTypes) =>
     },
     requestName: {
       type: DataTypes.STRING(32),
-      allowNull: true,
-    },
-    visitDdescription: {
-      type: DataTypes.STRING(128),
-      allowNull: true,
+      allowNull: false,
     },
     clientId: {
       type: DataTypes.INTEGER,
       allowNull: false
+    },
+    visitDescription: {
+      type: DataTypes.STRING(128),
+      allowNull: true,
     },
     vehicleName: {
       type: DataTypes.STRING(32),
@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) =>
     },
     registrationNumber: {
       type: DataTypes.STRING(10),
-      allowNull: true,
+      allowNull: false,
     },
     vehicleType: {
       type: DataTypes.TINYINT,
