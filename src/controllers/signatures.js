@@ -3,7 +3,6 @@ const path = require('path');
 const fs = require('fs');
 const {Directory} = require('../models');
 
-
 module.exports = {
   async get1 (req, res) {
     try {
