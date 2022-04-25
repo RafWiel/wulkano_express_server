@@ -1,23 +1,53 @@
 const {TruckService} = require('../models');
-const {Client} = require('../models');
+const {TruckTire} = require('../models');
+const {Company} = require('../models');
 const {QueryTypes} = require('sequelize');
 const {sequelize} = require('../models');
 const directoriesController = require('./directories');
 const tools = require('../misc/tools');
 const signature = require('../misc/signature');
 const { Op } = require('sequelize');
+const tireType = require('../enums/truckTireType');
+
+async function createTires(request, type, array) {
+  for (let i = 0; i < array.length; i++) {
+    const tire = array[i];
+
+    try {
+      await TruckTire.create({
+        serviceId: request.id,
+        type: type,
+        location: tire.location,
+        width: tire.width,
+        profile: tire.profile,
+        diameter: tire.diameter,
+        serial: tire.dot,
+        brand: tire.brand,
+        tread: tire.tread,
+        pressure: tire.pressure
+      });
+    }
+    catch (error) {
+      return error;
+    }
+  }
+
+  return true;
+}
 
 module.exports = {
   async create (req, res) {
     try {
       console.log(req.body);
-      const {name, companyName, phoneNumber, email} = req.body.client;
+      const {name, taxId, phoneNumber, email, city} = req.body.company;
 
-      //find client
-      const clients = await sequelize.query(`
+      //find company
+      const companies = await sequelize.query(`
         select id
-        from Clients
+        from Companies
         where (
+          name = :name or
+          taxId = :taxId or
           phoneNumber = :phoneNumber or (
             email = :email and
             email != '' and
@@ -27,20 +57,23 @@ module.exports = {
       `, {
         type: QueryTypes.SELECT,
         replacements: {
+          name: [name],
+          taxId: [taxId],
           phoneNumber: [phoneNumber],
           email: [email],
         },
       });
 
-      let [client] = clients;
+      let [company] = companies;
 
-      // create client
-      if (client === undefined) {
-        client = await Client.create({
+      // create company
+      if (company === undefined) {
+        company = await Company.create({
           name,
-          companyName,
+          taxId,
           phoneNumber,
           email,
+          city
         });
       }
 
@@ -62,7 +95,7 @@ module.exports = {
         date: now,
         ordinal: ordinal,
         requestName: `D/${ordinal}/${now.getMonth() + 1}/${now.getFullYear().toString().substr(-2)}`,
-        clientId: client.id,
+        companyId: company.id,
         visitDescription: req.body.visitDescription,
         vehicleName: req.body.vehicleName,
         registrationNumber: req.body.registrationNumber,
@@ -151,26 +184,27 @@ module.exports = {
         employeeSignatureFileName: employeeSignatureFileName,
         clientSignatureFileName: clientSignatureFileName,
       })
-      .then((item) => {
-        //add tires
-        // req.body.tires.filter(u => u.width && u.profile && u.diameter).forEach((tire) => {
-        //   DepositTire.create({
-        //     depositId: item.id,
-        //     width: tire.width,
-        //     profile: tire.profile,
-        //     diameter: tire.diameter,
-        //     dot: tire.dot,
-        //     brand: tire.brand,
-        //     tread: tire.tread,
-        //     note: tire.note,
-        //   })
-        //   .catch((error) => tools.sendError(res, error));
-        // });
+      .then(async (item) => {
+        //add size tires
+        const sizeTiresResult = await createTires(item, tireType.size, req.body.sizeTires.filter(u => u.width && u.profile && u.diameter));
 
-        res.send({
-          result: true,
-          serviceId: item.id,
-        })
+        //add installed tires
+        const installedTiresResult = await createTires(item, tireType.installed, req.body.installedTires.filter(u => u.width && u.profile && u.diameter));
+
+        //add dismantled tires
+        const dismantledTiresResult = await createTires(item, tireType.dismantled, req.body.dismantledTires.filter(u => u.width && u.profile && u.diameter));
+
+        if (sizeTiresResult === true && installedTiresResult === true && dismantledTiresResult === true) {
+          res.send({
+            result: true,
+            serviceId: item.id,
+          });
+        }
+        else {
+          if (sizeTiresResult !== true) tools.sendError(res, sizeTiresResult);
+          if (installedTiresResult !== true) tools.sendError(res, installedTiresResult);
+          if (dismantledTiresResult !== true) tools.sendError(res, dismantledTiresResult);
+        }
       })
       .catch((error) => tools.sendError(res, error));
     }

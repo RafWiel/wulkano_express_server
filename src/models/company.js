@@ -1,12 +1,13 @@
 module.exports = (sequelize, DataTypes) =>
-  sequelize.define('Client', {
+  sequelize.define('Company', {
     name: {
       type: DataTypes.STRING(64),
       allowNull: false,
     },
-    companyName: {
-      type: DataTypes.STRING(32),
-      allowNull: true,
+    taxId: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
     },
     phoneNumber: {
       type: DataTypes.STRING,
@@ -17,6 +18,10 @@ module.exports = (sequelize, DataTypes) =>
       type: DataTypes.STRING,
       allowNull: true,
       unique: true,
+    },
+    city: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
   }, {
     timestamps: false

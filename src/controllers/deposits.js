@@ -8,6 +8,30 @@ const tools = require('../misc/tools');
 const signature = require('../misc/signature');
 const { Op } = require('sequelize');
 
+async function createTires(request, array) {
+  for (let i = 0; i < array.length; i++) {
+    const tire = array[i];
+
+    try {
+      await DepositTire.create({
+        depositId: request.id,
+        width: tire.width,
+        profile: tire.profile,
+        diameter: tire.diameter,
+        dot: tire.dot,
+        brand: tire.brand,
+        tread: tire.tread,
+        note: tire.note,
+      });
+    }
+    catch (error) {
+      return error;
+    }
+  }
+
+  return true;
+}
+
 module.exports = {
   async create (req, res) {
     try {
@@ -75,26 +99,20 @@ module.exports = {
         employeeSignatureFileName: employeeSignatureFileName,
         clientSignatureFileName: clientSignatureFileName,
       })
-      .then((item) => {
+      .then(async (item) => {
         //add tires
-        req.body.tires.filter(u => u.width && u.profile && u.diameter).forEach((tire) => {
-          DepositTire.create({
-            depositId: item.id,
-            width: tire.width,
-            profile: tire.profile,
-            diameter: tire.diameter,
-            dot: tire.dot,
-            brand: tire.brand,
-            tread: tire.tread,
-            note: tire.note,
-          })
-          .catch((error) => tools.sendError(res, error));
-        });
+        const tiresResult = await createTires(item, req.body.tires.filter(u => u.width && u.profile && u.diameter));
 
-        res.send({
-          result: true,
-          depositId: item.id,
-        })
+        console.log('TIRES RESULT');
+
+        if (tiresResult === true) {
+          console.log('OK');
+          res.send({
+            result: true,
+            serviceId: item.id,
+          });
+        }
+        else tools.sendError(res, tiresResult);
       })
       .catch((error) => tools.sendError(res, error));
     }

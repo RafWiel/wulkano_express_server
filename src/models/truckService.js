@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) =>
       type: DataTypes.STRING(32),
       allowNull: false,
     },
-    clientId: {
+    companyId: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
