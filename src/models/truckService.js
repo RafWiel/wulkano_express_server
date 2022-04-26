@@ -12,6 +12,10 @@ module.exports = (sequelize, DataTypes) =>
       type: DataTypes.STRING(32),
       allowNull: false,
     },
+    saleDocument: {
+      type: DataTypes.STRING(32),
+      allowNull: true,
+    },
     companyId: {
       type: DataTypes.INTEGER,
       allowNull: false
