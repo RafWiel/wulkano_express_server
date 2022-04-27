@@ -1,17 +1,17 @@
 const all = 0;
-const car = 1;
-const truck = 2;
+const carService = 1;
+const truckService = 2;
 const deposit = 3;
 
 module.exports = {
   all,
-  car,
-  truck,
+  carService,
+  truckService,
   deposit,
   items: [
     { id: all, text: 'Wszystkie' },
-    { id: car, text: 'Osobowe' },
-    { id: truck, text: 'Ciężarowe' },
+    { id: carService, text: 'Osobowe' },
+    { id: truckService, text: 'Ciężarowe' },
     { id: deposit, text: 'Depozyt' },
   ],
   getText(id) {

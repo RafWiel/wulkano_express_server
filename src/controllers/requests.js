@@ -15,7 +15,7 @@ module.exports = {
       console.log('query', req.query);
 
       // sorting columns
-      const sortColumns = ['a.date', 'a.requestName', 'clientName', 'c.companyName', 'c.phoneNumber', 'requestType'];
+      const sortColumns = ['date', 'requestName', 'clientName', 'companyName', 'phoneNumber', 'requestType'];
       const sortColumn = req.query['sort-column'] ? sortColumns[req.query['sort-column']] : 'a.date';
       const order = sortOrder.getSqlKeyword(req.query['sort-order']);
 
@@ -64,7 +64,7 @@ module.exports = {
       // run query
       sequelize.query(`
         select
-          a.id,
+          :depositType || '_' || a.id as id,
           a.date,
           a.requestName,
           c.name as clientName,
@@ -82,6 +82,28 @@ module.exports = {
         and case when :startDate is not null then a.date >= :startDate else true end
         and case when :stopDate is not null then a.date < :stopDate else true end
         and case when :depositType is not null then a.id is not null else a.id is null end
+
+        union
+
+        select
+          :truckServiceType || '_' || a.id as id,
+          a.date,
+          a.requestName,
+          '' as clientName,
+          c.name as companyName,
+          c.phoneNumber,
+          :truckServiceType as requestType
+        from TruckServices a
+        left join Companies c on a.companyId = c.id
+        where (
+          a.requestName like :search or
+          c.name like :search or
+          c.phoneNumber like :search
+        )
+        and case when :startDate is not null then a.date >= :startDate else true end
+        and case when :stopDate is not null then a.date < :stopDate else true end
+        and case when :truckServiceType is not null then a.id is not null else a.id is null end
+
         order by ${sortColumn} ${order}
         limit 50
         offset :offset
@@ -94,6 +116,9 @@ module.exports = {
           depositType: !req.query.type
             || parseInt(req.query.type) === requestType.all
             || parseInt(req.query.type) === requestType.deposit ? requestType.deposit : null,
+          truckServiceType: !req.query.type
+            || parseInt(req.query.type) === requestType.all
+            || parseInt(req.query.type) === requestType.truckService ? requestType.truckService : null,
           offset: 50 * (page - 1),
         },
       })
@@ -110,3 +135,28 @@ module.exports = {
     }
   },
 }
+
+// select
+//           a.id,
+//           a.date,
+//           a.requestName,
+//           c.name as clientName,
+//           c.companyName,
+//           c.phoneNumber,
+//           :depositType as requestType
+//         from Deposits a
+//         left join Clients c on a.clientId = c.id
+//         where (
+//           a.requestName like :search or
+//           c.name like :search or
+//           c.companyName like :search or
+//           c.phoneNumber like :search
+//         )
+//         and case when :startDate is not null then a.date >= :startDate else true end
+//         and case when :stopDate is not null then a.date < :stopDate else true end
+//         and case when :depositType is not null then a.id is not null else a.id is null end
+//         union
+//         select * from TruckServices
+//         order by ${sortColumn} ${order}
+//         limit 50
+//         offset :offset
