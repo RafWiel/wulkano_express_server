@@ -123,7 +123,7 @@ module.exports = {
   async getOne (req, res) {
     try {
       //get deposit
-      const deposits = await sequelize.query(`
+      const items = await sequelize.query(`
         select *
         from Deposits
         where id = :id
@@ -132,20 +132,19 @@ module.exports = {
         replacements: { id: req.params.id },
       });
 
-      const [deposit] = deposits;
+      const [item] = items;
 
       //get client
-      deposit.client = await Client.findOne({
-        where : { id: deposit.clientId },
+      item.client = await Client.findOne({
+        where : { id: item.clientId },
       });
 
       // get tires
-      deposit.tires = await DepositTire.findAll({
-        where : { depositId: deposit.id },
+      item.tires = await DepositTire.findAll({
+        where : { depositId: item.id },
       })
 
-
-      res.send({ deposit });
+      res.send({ item });
     } catch (error) {
       tools.sendError(res, error);
     }

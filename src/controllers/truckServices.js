@@ -21,7 +21,7 @@ async function createTires(request, type, array) {
         width: tire.width,
         profile: tire.profile,
         diameter: tire.diameter,
-        serial: tire.dot,
+        serial: tire.serial,
         brand: tire.brand,
         tread: tire.tread,
         pressure: tire.pressure
@@ -105,7 +105,6 @@ module.exports = {
         vehicleType: req.body.vehicle.type,
         mileage: req.body.vehicle.mileage,
         tireDiagnostics: req.body.tireDiagnostics,
-
         isTiresInspection: actions.tiresInspection.isChecked ? actions.tiresInspection.isChecked : null,
         tiresInspectionCount: actions.tiresInspection.isChecked ? actions.tiresInspection.count : null,
         tiresInspectionNote: actions.tiresInspection.isChecked ? actions.tiresInspection.info : null,
@@ -159,9 +158,9 @@ module.exports = {
         isDeepening: actions.deepening.isChecked ? actions.deepening.isChecked : null,
         deepeningCount: actions.deepening.isChecked ? actions.deepening.count : null,
         deepeningNote: actions.deepening.isChecked ? actions.deepening.info : null,
-        isDeepeningF: actions.deepening.isChecked ? actions.deepening.F : null,
-        isDeepeningD: actions.deepening.isChecked ? actions.deepening.D : null,
-        isDeepeningT: actions.deepening.isChecked ? actions.deepening.T : null,
+        isDeepeningF: actions.deepening.isChecked ? actions.deepening.f : null,
+        isDeepeningD: actions.deepening.isChecked ? actions.deepening.d : null,
+        isDeepeningT: actions.deepening.isChecked ? actions.deepening.t : null,
         isColdHotRepair: actions.coldHotRepair.isChecked ? actions.coldHotRepair.isChecked : null,
         coldHotRepairCount: actions.coldHotRepair.isChecked ? actions.coldHotRepair.count : null,
         coldHotRepairNote: actions.coldHotRepair.isChecked ? actions.coldHotRepair.info : null,
@@ -216,34 +215,194 @@ module.exports = {
       tools.sendError(res, error);
     }
   },
-  // async getOne (req, res) {
-  //   try {
-  //     //get deposit
-  //     const deposits = await sequelize.query(`
-  //       select *
-  //       from Deposits
-  //       where id = :id
-  //     `, {
-  //       type: QueryTypes.SELECT,
-  //       replacements: { id: req.params.id },
-  //     });
+  async getOne (req, res) {
+    try {
+      //get deposit
+      const items = await sequelize.query(`
+        select *
+        from TruckServices
+        where id = :id
+      `, {
+        type: QueryTypes.SELECT,
+        replacements: { id: req.params.id },
+      });
 
-  //     const [deposit] = deposits;
+      const [item] = items.map(item => ({
+        id: item.id,
+        date: item.date,
+        ordinal: item.ordinal,
+        requestName: item.requestName,
+        saleDocument: item.saleDocument,
+        companyId: item.companyId,
+        description: item.visitDescription,
+        vehicle: {
+          name: item.vehicleName,
+          registrationNumber: item.registrationNumber,
+          type: item.vehicleType,
+          mileage: item.mileage,
+        },
+        tireDiagnostics: item.tireDiagnostics,
+        actions: {
+          tiresInspection: {
+            isChecked: item.isTiresInspection,
+            count: item.tiresInspectionCount,
+            info: item.tiresInspectionNote,
+          },
+          pressureRegulation: {
+            isChecked: item.isPressureRegulation,
+            count: item.pressureRegulationCount,
+            info: item.pressureRegulationNote,
+          },
+          wheelWashing: {
+            isChecked: item.isWheelWashing,
+            count: item.wheelWashingCount,
+            info: item.wheelWashingNote,
+            extraInfo: item.wheelWashingDetails,
+          },
+          wheelUnscrewing: {
+            isChecked: item.isWheelUnscrewing,
+            count: item.wheelUnscrewingCount,
+            info: item.wheelUnscrewingNote,
+            extraInfo: item.wheelUnscrewingDetails,
+          },
+          tireInstallation: {
+            isChecked: item.isTireInstallation,
+            count: item.tireInstallationCount,
+            info: item.tireInstallationNote,
+            extraInfo: item.tireInstallationDetails,
+          },
+          wheelBalancing: {
+            isChecked: item.isWheelBalancing,
+            count: item.wheelBalancingCount,
+            info: item.wheelBalancingNote,
+            extraInfo: item.wheelBalancingDetails,
+          },
+          wheelWeights: {
+            isChecked: item.isWheelWeights,
+            count: item.wheelWeightsCount,
+            info: item.wheelWeightsNote,
+            extraInfo: item.wheelWeightsDetails,
+          },
+          wheelCentering: {
+            isChecked: item.isWheelCentering,
+            count: item.wheelCenteringCount,
+            info: item.wheelCenteringNote,
+          },
+          pinsCleaning: {
+            isChecked: item.isPinsCleaning,
+            count: item.pinsCleaningCount,
+            info: item.pinsCleaningNote,
+          },
+          tighteningWithTorqueWrench: {
+            isChecked: item.isTighteningWithTorqueWrench,
+            count: item.tighteningWithTorqueWrenchCount,
+            info: item.tighteningWithTorqueWrenchNote,
+          },
+          handingOverTighteningCard: {
+            isChecked: item.isHandingOverTighteningCard,
+            count: item.handingOverTighteningCardCount,
+            info: item.handingOverTighteningCardNote,
+          },
+          pumping: {
+            isChecked: item.isPumping,
+            count: item.pumpingCount,
+            info: item.pumpingNote,
+            extraInfo: item.pumpingDetails,
+          },
+          valveChange: {
+            isChecked: item.isValveChange,
+            count: item.valveChangeCount,
+            info: item.valveChangeNote,
+            extraInfo: item.valveChangeDetails,
+          },
+          extensionInstallation: {
+            isChecked: item.isExtensionInstallation,
+            count: item.extensionInstallationCount,
+            info: item.extensionInstallationNote,
+            extraInfo: item.extensionInstallationDetails,
+          },
+          deepening: {
+            isChecked: item.isDeepening,
+            count: item.deepeningCount,
+            info: item.deepeningNote,
+            f: item.isDeepeningF,
+            d: item.isDeepeningD,
+            t: item.isDeepeningT,
+          },
+          coldHotRepair: {
+            isChecked: item.isColdHotRepair,
+            count: item.coldHotRepairCount,
+            info: item.coldHotRepairNote,
+            extraInfo: item.coldHotRepairDetails,
+          },
+          utilization: {
+            isChecked: item.isUtilization,
+            count: item.utilizationCount,
+            info: item.utilizationNote,
+            extraInfo: item.utilizationDetails,
+          },
+          driveToClient: {
+            isChecked: item.isDriveToClient,
+            count: item.driveToClientCount,
+            info: item.driveToClientNote,
+            extraInfo: item.driveToClientDetails,
+          },
+          other: {
+            isChecked: item.isOther,
+            count: item.otherCount,
+            info: item.otherNote,
+            extraInfo: item.otherDetails,
+          },
+        },
+        otherMaterials: item.otherMaterials,
+        recommendations: {
+          geometry: item.isGeometryRecommendation,
+          shockAbsorbers: item.isShockAbsorbersRecommendation,
+          brakes: item.isBrakesRecommendation,
+        },
+        nextVisit:{
+          date: item.nextVisitDate,
+          description: item.nextVisitDescription,
+        },
+        directoryId: item.directoryId,
+        employeeSignatureFileName: item.employeeSignatureFileName,
+        clientSignatureFileName: item.clientSignatureFileName,
+      }));
 
-  //     //get client
-  //     deposit.client = await Client.findOne({
-  //       where : { id: deposit.clientId },
-  //     });
+      //const [item] = items;
 
-  //     // get tires
-  //     deposit.tires = await DepositTire.findAll({
-  //       where : { depositId: deposit.id },
-  //     })
+      //get company
+      item.company = await Company.findOne({
+        where : { id: item.companyId },
+      });
 
+      // get size tires
+      item.sizeTires = await TruckTire.findAll({
+        where : {
+          serviceId: item.id,
+          type: tireType.size,
+       },
+      });
 
-  //     res.send({ deposit });
-  //   } catch (error) {
-  //     tools.sendError(res, error);
-  //   }
-  // },
+      // get installed tires
+      item.installedTires = await TruckTire.findAll({
+        where : {
+          serviceId: item.id,
+          type: tireType.installed,
+       },
+      });
+
+      // get dismantled tires
+      item.dismantledTires = await TruckTire.findAll({
+        where : {
+          serviceId: item.id,
+          type: tireType.dismantled,
+       },
+      });
+
+      res.send({ item });
+    } catch (error) {
+      tools.sendError(res, error);
+    }
+  },
 }
