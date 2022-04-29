@@ -1,6 +1,7 @@
 const {TruckService} = require('../models');
 const {TruckTire} = require('../models');
 const {Company} = require('../models');
+const {Mechanic} = require('../models');
 const {QueryTypes} = require('sequelize');
 const {sequelize} = require('../models');
 const directoriesController = require('./directories');
@@ -11,20 +12,38 @@ const tireType = require('../enums/truckTireType');
 
 async function createTires(request, type, array) {
   for (let i = 0; i < array.length; i++) {
-    const tire = array[i];
+    const item = array[i];
 
     try {
       await TruckTire.create({
         serviceId: request.id,
         type: type,
-        location: tire.location,
-        width: tire.width,
-        profile: tire.profile,
-        diameter: tire.diameter,
-        serial: tire.serial,
-        brand: tire.brand,
-        tread: tire.tread,
-        pressure: tire.pressure
+        location: item.location,
+        width: item.width,
+        profile: item.profile,
+        diameter: item.diameter,
+        serial: item.serial,
+        brand: item.brand,
+        tread: item.tread,
+        pressure: item.pressure
+      });
+    }
+    catch (error) {
+      return error;
+    }
+  }
+
+  return true;
+}
+
+async function createMechanics(request, array) {
+  for (let i = 0; i < array.length; i++) {
+    const item = array[i];
+
+    try {
+      await Mechanic.create({
+        serviceId: request.id,
+        name: item.name
       });
     }
     catch (error) {
@@ -197,7 +216,13 @@ module.exports = {
         //add dismantled tires
         const dismantledTiresResult = await createTires(item, tireType.dismantled, req.body.dismantledTires.filter(u => u.width && u.profile && u.diameter));
 
-        if (sizeTiresResult === true && installedTiresResult === true && dismantledTiresResult === true) {
+        //add mechanics
+        const mechanicsResult = await createMechanics(item, req.body.mechanics.filter(u => u.name));
+
+        if (sizeTiresResult === true
+          && installedTiresResult === true
+          && dismantledTiresResult === true
+          && mechanicsResult === true) {
           res.send({
             result: true,
             serviceId: item.id,
@@ -207,6 +232,7 @@ module.exports = {
           if (sizeTiresResult !== true) tools.sendError(res, sizeTiresResult);
           if (installedTiresResult !== true) tools.sendError(res, installedTiresResult);
           if (dismantledTiresResult !== true) tools.sendError(res, dismantledTiresResult);
+          if (mechanicsResult !== true) tools.sendError(res, mechanicsResult);
         }
       })
       .catch((error) => tools.sendError(res, error));
@@ -397,6 +423,14 @@ module.exports = {
         where : {
           serviceId: item.id,
           type: tireType.dismantled,
+       },
+      });
+
+      // get mechanics
+      item.mechanics = await Mechanic.findAll({
+        attributes: [ 'name' ],
+        where : {
+          serviceId: item.id
        },
       });
 
