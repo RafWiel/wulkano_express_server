@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) =>
-  sequelize.define('TruckService', {
+  sequelize.define('CarService', {
     date: {
       type: DataTypes.DATE,
       allowNull: false
@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) =>
       type: DataTypes.STRING(32),
       allowNull: true,
     },
-    companyId: {
+    clientId: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
@@ -40,79 +40,127 @@ module.exports = (sequelize, DataTypes) =>
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    tireDiagnostics: {
+    incorrectTireWearLocation: {
+      type: DataTypes.TINYINT,
+      allowNull: true
+    },
+    isGeometryRequired: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
+    tireChange: {
+      type: DataTypes.TINYINT,
+      allowNull: true
+    },
+    isDepositTires: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
+    isDepositAlloys: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
+    isDepositSteels: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
+    isDepositScrews: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
+    isDepositHubcubs: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
+    depositTiresNote: {
       type: DataTypes.STRING(512),
       allowNull: true,
     },
-    isActionTiresInspection: {
-      type: DataTypes.BOOLEAN,
+    depositTiresLocation: {
+      type: DataTypes.STRING(512),
       allowNull: true,
     },
-    actionTiresInspectionCount: {
+    visualInspectionBrakePadsFront: {
       type: DataTypes.TINYINT,
       allowNull: true,
     },
-    actionTiresInspectionNote: {
-      type: DataTypes.STRING(128),
-      allowNull: true,
-    },
-    isActionPressureRegulation: {
-      type: DataTypes.BOOLEAN,
-      allowNull: true,
-    },
-    actionPressureRegulationCount: {
+    visualInspectionBrakePadsRear: {
       type: DataTypes.TINYINT,
       allowNull: true,
     },
-    actionPressureRegulationNote: {
-      type: DataTypes.STRING(128),
-      allowNull: true,
-    },
-    isActionWheelWashing: {
-      type: DataTypes.BOOLEAN,
-      allowNull: true,
-    },
-    actionWheelWashingCount: {
+    visualInspectionBrakeDiscsFront: {
       type: DataTypes.TINYINT,
       allowNull: true,
     },
-    actionWheelWashingNote: {
-      type: DataTypes.STRING(128),
-      allowNull: true,
-    },
-    actionWheelWashingDetails: {
-      type: DataTypes.STRING(128),
-      allowNull: true,
-    },
-    isActionWheelUnscrewing: {
-      type: DataTypes.BOOLEAN,
-      allowNull: true,
-    },
-    actionWheelUnscrewingCount: {
+    visualInspectionBrakeDiscsRear: {
       type: DataTypes.TINYINT,
       allowNull: true,
     },
-    actionWheelUnscrewingNote: {
-      type: DataTypes.STRING(128),
-      allowNull: true,
-    },
-    actionWheelUnscrewingDetails: {
-      type: DataTypes.STRING(128),
-      allowNull: true,
-    },
-    isActionTireInstallation: {
-      type: DataTypes.BOOLEAN,
-      allowNull: true,
-    },
-    actionTireInstallationCount: {
+    visualInspectionShockAbsorbers: {
       type: DataTypes.TINYINT,
       allowNull: true,
     },
-    actionTireInstallationNote: {
+    visualInspectionSuspension: {
+      type: DataTypes.TINYINT,
+      allowNull: true,
+    },
+    visualInspectionAirco: {
+      type: DataTypes.TINYINT,
+      allowNull: true,
+    },
+    visualInspectionOil: {
+      type: DataTypes.TINYINT,
+      allowNull: true,
+    },
+    visualInspectionLights: {
+      type: DataTypes.TINYINT,
+      allowNull: true,
+    },
+    visualInspectionWashingFluid: {
+      type: DataTypes.TINYINT,
+      allowNull: true,
+    },
+    visualInspectionBrakeFluid: {
+      type: DataTypes.TINYINT,
+      allowNull: true,
+    },
+    visualInspectionCoolingFluid: {
+      type: DataTypes.TINYINT,
+      allowNull: true,
+    },
+    visualInspectionWipers: {
+      type: DataTypes.TINYINT,
+      allowNull: true,
+    },
+    visualInspectionOther: {
+      type: DataTypes.TINYINT,
+      allowNull: true,
+    },
+    visualInspectionOtherDetails: {
+      type: DataTypes.STRING(512),
+      allowNull: true,
+    },
+    isActionScrewing: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
+    actionScrewingCount: {
+      type: DataTypes.TINYINT,
+      allowNull: true,
+    },
+    actionScrewingNote: {
       type: DataTypes.STRING(128),
       allowNull: true,
     },
-    actionTireInstallationDetails: {
+    isActionInstallation: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
+    actionInstallationCount: {
+      type: DataTypes.TINYINT,
+      allowNull: true,
+    },
+    actionInstallationNote: {
       type: DataTypes.STRING(128),
       allowNull: true,
     },
@@ -128,159 +176,71 @@ module.exports = (sequelize, DataTypes) =>
       type: DataTypes.STRING(128),
       allowNull: true,
     },
-    actionWheelBalancingDetails: {
-      type: DataTypes.STRING(128),
-      allowNull: true,
-    },
-    isActionWheelWeights: {
+    isActionWheelBalancingSteel: {
       type: DataTypes.BOOLEAN,
       allowNull: true,
     },
-    actionWheelWeightsCount: {
+    isActionWheelBalancingAlloy: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
+    isActionTireRepair: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
+    actionTireRepairCount: {
       type: DataTypes.TINYINT,
       allowNull: true,
     },
-    actionWheelWeightsNote: {
+    actionTireRepairNote: {
       type: DataTypes.STRING(128),
       allowNull: true,
     },
-    actionWheelWeightsDetails: {
-      type: DataTypes.STRING(128),
-      allowNull: true,
-    },
-    isActionWheelCentering: {
+    isActionWheelRimStraightening: {
       type: DataTypes.BOOLEAN,
       allowNull: true,
     },
-    actionWheelCenteringCount: {
+    actionRimStraighteningCount: {
       type: DataTypes.TINYINT,
       allowNull: true,
     },
-    actionWheelCenteringNote: {
+    actionRimStraighteningNote: {
       type: DataTypes.STRING(128),
       allowNull: true,
     },
-    isActionPinsCleaning: {
+    isActionRimStraighteningSteel: {
       type: DataTypes.BOOLEAN,
       allowNull: true,
     },
-    actionPinsCleaningCount: {
+    isActionRimStraighteningAlloy: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
+    isActionAirValve: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
+    actionAirValveCount: {
       type: DataTypes.TINYINT,
       allowNull: true,
     },
-    actionPinsCleaningNote: {
+    actionAirValveNote: {
       type: DataTypes.STRING(128),
       allowNull: true,
     },
-    isActionTighteningWithTorqueWrench: {
+    actionAirValveDetails: {
+      type: DataTypes.STRING(128),
+      allowNull: true,
+    },
+    isActionNitrogenFill: {
       type: DataTypes.BOOLEAN,
       allowNull: true,
     },
-    actionTighteningWithTorqueWrenchCount: {
+    actionNitrogenFillCount: {
       type: DataTypes.TINYINT,
       allowNull: true,
     },
-    actionTighteningWithTorqueWrenchNote: {
-      type: DataTypes.STRING(128),
-      allowNull: true,
-    },
-    isActionHandingOverTighteningCard: {
-      type: DataTypes.BOOLEAN,
-      allowNull: true,
-    },
-    actionHandingOverTighteningCardCount: {
-      type: DataTypes.TINYINT,
-      allowNull: true,
-    },
-    actionHandingOverTighteningCardNote: {
-      type: DataTypes.STRING(128),
-      allowNull: true,
-    },
-    isActionPumping: {
-      type: DataTypes.BOOLEAN,
-      allowNull: true,
-    },
-    actionPumpingCount: {
-      type: DataTypes.TINYINT,
-      allowNull: true,
-    },
-    actionPumpingNote: {
-      type: DataTypes.STRING(128),
-      allowNull: true,
-    },
-    actionPumpingDetails: {
-      type: DataTypes.STRING(128),
-      allowNull: true,
-    },
-    isActionValveChange: {
-      type: DataTypes.BOOLEAN,
-      allowNull: true,
-    },
-    actionValveChangeCount: {
-      type: DataTypes.TINYINT,
-      allowNull: true,
-    },
-    actionValveChangeNote: {
-      type: DataTypes.STRING(128),
-      allowNull: true,
-    },
-    actionValveChangeDetails: {
-      type: DataTypes.STRING(128),
-      allowNull: true,
-    },
-    isActionExtensionInstallation: {
-      type: DataTypes.BOOLEAN,
-      allowNull: true,
-    },
-    actionExtensionInstallationCount: {
-      type: DataTypes.TINYINT,
-      allowNull: true,
-    },
-    actionExtensionInstallationNote: {
-      type: DataTypes.STRING(128),
-      allowNull: true,
-    },
-    actionExtensionInstallationDetails: {
-      type: DataTypes.STRING(128),
-      allowNull: true,
-    },
-    isActionDeepening: {
-      type: DataTypes.BOOLEAN,
-      allowNull: true,
-    },
-    actionDeepeningCount: {
-      type: DataTypes.TINYINT,
-      allowNull: true,
-    },
-    actionDeepeningNote: {
-      type: DataTypes.STRING(128),
-      allowNull: true,
-    },
-    isActionDeepeningF: {
-      type: DataTypes.BOOLEAN,
-      allowNull: true,
-    },
-    isActionDeepeningD: {
-      type: DataTypes.BOOLEAN,
-      allowNull: true,
-    },
-    isActionDeepeningT: {
-      type: DataTypes.BOOLEAN,
-      allowNull: true,
-    },
-    isActionColdHotRepair: {
-      type: DataTypes.BOOLEAN,
-      allowNull: true,
-    },
-    actionColdHotRepairCount: {
-      type: DataTypes.TINYINT,
-      allowNull: true,
-    },
-    actionColdHotRepairNote: {
-      type: DataTypes.STRING(128),
-      allowNull: true,
-    },
-    actionColdHotRepairDetails: {
+    actionNitrogenFillNote: {
       type: DataTypes.STRING(128),
       allowNull: true,
     },
@@ -296,64 +256,176 @@ module.exports = (sequelize, DataTypes) =>
       type: DataTypes.STRING(128),
       allowNull: true,
     },
-    actionUtilizationDetails: {
-      type: DataTypes.STRING(128),
-      allowNull: true,
-    },
-    isActionDriveToClient: {
+    isFastFitBrakePads: {
       type: DataTypes.BOOLEAN,
       allowNull: true,
     },
-    actionDriveToClientCount: {
+    fastFitBrakePadsCount: {
       type: DataTypes.TINYINT,
       allowNull: true,
     },
-    actionDriveToClientNote: {
+    fastFitBrakePadsNote: {
       type: DataTypes.STRING(128),
       allowNull: true,
     },
-    actionDriveToClientDetails: {
-      type: DataTypes.STRING(128),
-      allowNull: true,
-    },
-    isActionOther: {
+    isFastFitBrakePadsFront: {
       type: DataTypes.BOOLEAN,
       allowNull: true,
     },
-    actionOtherCount: {
+    isFastFitBrakePadsRear: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
+    isFastFitBrakeDiscs: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
+    fastFitBrakeDiscsCount: {
       type: DataTypes.TINYINT,
       allowNull: true,
     },
-    actionOtherNote: {
+    fastFitBrakeDiscsNote: {
       type: DataTypes.STRING(128),
       allowNull: true,
     },
-    actionOtherDetails: {
+    isFastFitBrakeDiscsFront: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
+    isFastFitBrakeDiscsRear: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
+    isFastFitShockAbsorbers: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
+    fastFitShockAbsorbersCount: {
+      type: DataTypes.TINYINT,
+      allowNull: true,
+    },
+    fastFitShockAbsorbersNote: {
       type: DataTypes.STRING(128),
       allowNull: true,
     },
-    otherMaterials: {
-      type: DataTypes.STRING(512),
-      allowNull: true,
-    },
-    isGeometryRecommendation: {
+    isFastFitShockAbsorbersFront: {
       type: DataTypes.BOOLEAN,
       allowNull: true,
     },
-    isShockAbsorbersRecommendation: {
+    isFastFitShockAbsorbersRear: {
       type: DataTypes.BOOLEAN,
       allowNull: true,
     },
-    isBrakesRecommendation: {
+    isFastFitGeometry: {
       type: DataTypes.BOOLEAN,
       allowNull: true,
     },
-    nextVisitDate: {
-      type: DataTypes.DATE,
-      allowNull: false
+    fastFitGeometryCount: {
+      type: DataTypes.TINYINT,
+      allowNull: true,
     },
-    nextVisitDescription: {
-      type: DataTypes.STRING(512),
+    fastFitGeometryNote: {
+      type: DataTypes.STRING(128),
+      allowNull: true,
+    },
+    isFastFitFuelFilter: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
+    fastFitFuelFilterCount: {
+      type: DataTypes.TINYINT,
+      allowNull: true,
+    },
+    fastFitFuelFilterNote: {
+      type: DataTypes.STRING(128),
+      allowNull: true,
+    },
+    isInspectionOilChange: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
+    inspectionOilChangeCount: {
+      type: DataTypes.TINYINT,
+      allowNull: true,
+    },
+    inspectionOilChangePrice: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+    },
+    isInspectionOilFilterChange: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
+    inspectionOilFilterChangeCount: {
+      type: DataTypes.TINYINT,
+      allowNull: true,
+    },
+    inspectionOilFilterChangePrice: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+    },
+    isInspectionAirFilterChange: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
+    inspectionAirFilterChangeCount: {
+      type: DataTypes.TINYINT,
+      allowNull: true,
+    },
+    inspectionAirFilterChangePrice: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+    },
+    isInspectionInteriorFilterChange: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
+    inspectionInteriorFilterChangeCount: {
+      type: DataTypes.TINYINT,
+      allowNull: true,
+    },
+    inspectionInteriorFilterChangePrice: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+    },
+    isInspectionAirco: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
+    inspectionAircoCount: {
+      type: DataTypes.TINYINT,
+      allowNull: true,
+    },
+    inspectionAircoPrice: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+    },
+    isInspectionAircoCleaning: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
+    isInspectionAircoFilter: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
+    isInspectionAircoFilling: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
+    isInspectionOther: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
+    inspectionOtherCount: {
+      type: DataTypes.TINYINT,
+      allowNull: true,
+    },
+    inspectionOtherPrice: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+    },
+    inspectionOtherDetails: {
+      type: DataTypes.STRING(128),
       allowNull: true,
     },
     directoryId: {
