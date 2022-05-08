@@ -148,8 +148,8 @@ module.exports = (sequelize, DataTypes) =>
       type: DataTypes.TINYINT,
       allowNull: true,
     },
-    actionScrewingNote: {
-      type: DataTypes.STRING(128),
+    actionScrewingPrice: {
+      type: DataTypes.DECIMAL(6, 2),
       allowNull: true,
     },
     isActionInstallation: {
@@ -160,8 +160,8 @@ module.exports = (sequelize, DataTypes) =>
       type: DataTypes.TINYINT,
       allowNull: true,
     },
-    actionInstallationNote: {
-      type: DataTypes.STRING(128),
+    actionInstallationPrice: {
+      type: DataTypes.DECIMAL(6, 2),
       allowNull: true,
     },
     isActionWheelBalancing: {
@@ -172,8 +172,8 @@ module.exports = (sequelize, DataTypes) =>
       type: DataTypes.TINYINT,
       allowNull: true,
     },
-    actionWheelBalancingNote: {
-      type: DataTypes.STRING(128),
+    actionWheelBalancingPrice: {
+      type: DataTypes.DECIMAL(6, 2),
       allowNull: true,
     },
     isActionWheelBalancingSteel: {
@@ -192,11 +192,11 @@ module.exports = (sequelize, DataTypes) =>
       type: DataTypes.TINYINT,
       allowNull: true,
     },
-    actionTireRepairNote: {
-      type: DataTypes.STRING(128),
+    actionTireRepairPrice: {
+      type: DataTypes.DECIMAL(6, 2),
       allowNull: true,
     },
-    isActionWheelRimStraightening: {
+    isActionRimStraightening: {
       type: DataTypes.BOOLEAN,
       allowNull: true,
     },
@@ -204,8 +204,8 @@ module.exports = (sequelize, DataTypes) =>
       type: DataTypes.TINYINT,
       allowNull: true,
     },
-    actionRimStraighteningNote: {
-      type: DataTypes.STRING(128),
+    actionRimStraighteningPrice: {
+      type: DataTypes.DECIMAL(6, 2),
       allowNull: true,
     },
     isActionRimStraighteningSteel: {
@@ -224,8 +224,8 @@ module.exports = (sequelize, DataTypes) =>
       type: DataTypes.TINYINT,
       allowNull: true,
     },
-    actionAirValveNote: {
-      type: DataTypes.STRING(128),
+    actionAirValvePrice: {
+      type: DataTypes.DECIMAL(6, 2),
       allowNull: true,
     },
     actionAirValveDetails: {
@@ -240,8 +240,8 @@ module.exports = (sequelize, DataTypes) =>
       type: DataTypes.TINYINT,
       allowNull: true,
     },
-    actionNitrogenFillNote: {
-      type: DataTypes.STRING(128),
+    actionNitrogenFillPrice: {
+      type: DataTypes.DECIMAL(6, 2),
       allowNull: true,
     },
     isActionUtilization: {
@@ -252,8 +252,8 @@ module.exports = (sequelize, DataTypes) =>
       type: DataTypes.TINYINT,
       allowNull: true,
     },
-    actionUtilizationNote: {
-      type: DataTypes.STRING(128),
+    actionUtilizationPrice: {
+      type: DataTypes.DECIMAL(6, 2),
       allowNull: true,
     },
     isFastFitBrakePads: {
@@ -264,8 +264,8 @@ module.exports = (sequelize, DataTypes) =>
       type: DataTypes.TINYINT,
       allowNull: true,
     },
-    fastFitBrakePadsNote: {
-      type: DataTypes.STRING(128),
+    fastFitBrakePadsPrice: {
+      type: DataTypes.DECIMAL(6, 2),
       allowNull: true,
     },
     isFastFitBrakePadsFront: {
@@ -284,8 +284,8 @@ module.exports = (sequelize, DataTypes) =>
       type: DataTypes.TINYINT,
       allowNull: true,
     },
-    fastFitBrakeDiscsNote: {
-      type: DataTypes.STRING(128),
+    fastFitBrakeDiscsPrice: {
+      type: DataTypes.DECIMAL(6, 2),
       allowNull: true,
     },
     isFastFitBrakeDiscsFront: {
@@ -304,8 +304,8 @@ module.exports = (sequelize, DataTypes) =>
       type: DataTypes.TINYINT,
       allowNull: true,
     },
-    fastFitShockAbsorbersNote: {
-      type: DataTypes.STRING(128),
+    fastFitShockAbsorbersPrice: {
+      type: DataTypes.DECIMAL(6, 2),
       allowNull: true,
     },
     isFastFitShockAbsorbersFront: {
@@ -324,8 +324,8 @@ module.exports = (sequelize, DataTypes) =>
       type: DataTypes.TINYINT,
       allowNull: true,
     },
-    fastFitGeometryNote: {
-      type: DataTypes.STRING(128),
+    fastFitGeometryPrice: {
+      type: DataTypes.DECIMAL(6, 2),
       allowNull: true,
     },
     isFastFitFuelFilter: {
@@ -336,8 +336,8 @@ module.exports = (sequelize, DataTypes) =>
       type: DataTypes.TINYINT,
       allowNull: true,
     },
-    fastFitFuelFilterNote: {
-      type: DataTypes.STRING(128),
+    fastFitFuelFilterPrice: {
+      type: DataTypes.DECIMAL(6, 2),
       allowNull: true,
     },
     isInspectionOilChange: {
@@ -349,7 +349,7 @@ module.exports = (sequelize, DataTypes) =>
       allowNull: true,
     },
     inspectionOilChangePrice: {
-      type: DataTypes.FLOAT,
+      type: DataTypes.DECIMAL(6, 2),
       allowNull: true,
     },
     isInspectionOilFilterChange: {
@@ -361,7 +361,7 @@ module.exports = (sequelize, DataTypes) =>
       allowNull: true,
     },
     inspectionOilFilterChangePrice: {
-      type: DataTypes.FLOAT,
+      type: DataTypes.DECIMAL(6, 2),
       allowNull: true,
     },
     isInspectionAirFilterChange: {
@@ -373,7 +373,7 @@ module.exports = (sequelize, DataTypes) =>
       allowNull: true,
     },
     inspectionAirFilterChangePrice: {
-      type: DataTypes.FLOAT,
+      type: DataTypes.DECIMAL(6, 2),
       allowNull: true,
     },
     isInspectionInteriorFilterChange: {
@@ -385,7 +385,7 @@ module.exports = (sequelize, DataTypes) =>
       allowNull: true,
     },
     inspectionInteriorFilterChangePrice: {
-      type: DataTypes.FLOAT,
+      type: DataTypes.DECIMAL(6, 2),
       allowNull: true,
     },
     isInspectionAirco: {
@@ -397,7 +397,7 @@ module.exports = (sequelize, DataTypes) =>
       allowNull: true,
     },
     inspectionAircoPrice: {
-      type: DataTypes.FLOAT,
+      type: DataTypes.DECIMAL(6, 2),
       allowNull: true,
     },
     isInspectionAircoCleaning: {
@@ -421,7 +421,7 @@ module.exports = (sequelize, DataTypes) =>
       allowNull: true,
     },
     inspectionOtherPrice: {
-      type: DataTypes.FLOAT,
+      type: DataTypes.DECIMAL(6, 2),
       allowNull: true,
     },
     inspectionOtherDetails: {
