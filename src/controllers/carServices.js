@@ -111,7 +111,7 @@ module.exports = {
       CarService.create({
         date: now,
         ordinal: ordinal,
-        requestName: `C/${ordinal}/${now.getMonth() + 1}/${now.getFullYear().toString().substr(-2)}`,
+        requestName: `O/${ordinal}/${now.getMonth() + 1}/${now.getFullYear().toString().substr(-2)}`,
         saleDocument: req.body.saleDocument,
         clientId: client.id,
         visitDescription: req.body.description,

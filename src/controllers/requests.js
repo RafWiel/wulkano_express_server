@@ -104,6 +104,27 @@ module.exports = {
         and case when :stopDate is not null then a.date < :stopDate else true end
         and case when :truckServiceType is not null then a.id is not null else a.id is null end
 
+        union
+
+        select
+          :carServiceType || '_' || a.id as id,
+          a.date,
+          a.requestName,
+          c.name as clientName,
+          c.companyName,
+          c.phoneNumber,
+          :carServiceType as requestType
+        from CarServices a
+        left join Clients c on a.clientId = c.id
+        where (
+          a.requestName like :search or
+          c.name like :search or
+          c.phoneNumber like :search
+        )
+        and case when :startDate is not null then a.date >= :startDate else true end
+        and case when :stopDate is not null then a.date < :stopDate else true end
+        and case when :carServiceType is not null then a.id is not null else a.id is null end
+
         order by ${sortColumn} ${order}
         limit 50
         offset :offset
@@ -119,6 +140,9 @@ module.exports = {
           truckServiceType: !req.query.type
             || parseInt(req.query.type) === requestType.all
             || parseInt(req.query.type) === requestType.truckService ? requestType.truckService : null,
+          carServiceType: !req.query.type
+            || parseInt(req.query.type) === requestType.all
+            || parseInt(req.query.type) === requestType.carService ? requestType.carService : null,
           offset: 50 * (page - 1),
         },
       })
