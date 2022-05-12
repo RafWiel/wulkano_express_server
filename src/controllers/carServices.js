@@ -1,59 +1,40 @@
 const {CarService} = require('../models');
-const {TruckTire} = require('../models');
+const {CarTire} = require('../models');
 const {Client} = require('../models');
-const {Company} = require('../models');
-const {Mechanic} = require('../models');
 const {QueryTypes} = require('sequelize');
 const {sequelize} = require('../models');
 const directoriesController = require('./directories');
 const tools = require('../misc/tools');
 const signature = require('../misc/signature');
 const { Op } = require('sequelize');
-const tireType = require('../enums/truckTireType');
+const tireType = require('../enums/carTireType');
 
-// async function createTires(request, type, array) {
-//   for (let i = 0; i < array.length; i++) {
-//     const item = array[i];
+async function createTires(request, type, array) {
+  for (let i = 0; i < array.length; i++) {
+    const item = array[i];
 
-//     try {
-//       await TruckTire.create({
-//         serviceId: request.id,
-//         type: type,
-//         location: item.location,
-//         width: item.width,
-//         profile: item.profile,
-//         diameter: item.diameter,
-//         serial: item.serial,
-//         brand: item.brand,
-//         tread: item.tread,
-//         pressure: item.pressure
-//       });
-//     }
-//     catch (error) {
-//       return error;
-//     }
-//   }
+    try {
+      await CarTire.create({
+        serviceId: request.id,
+        type: type,
+        location: item.location,
+        status: item.status,
+        //width: item.width,
+        //profile: item.profile,
+        //diameter: item.diameter,
+        //serial: item.serial,
+        //brand: item.brand,
+        tread: item.tread,
+        pressure: item.pressure
+      });
+    }
+    catch (error) {
+      return error;
+    }
+  }
 
-//   return true;
-// }
-
-// async function createMechanics(request, array) {
-//   for (let i = 0; i < array.length; i++) {
-//     const item = array[i];
-
-//     try {
-//       await Mechanic.create({
-//         serviceId: request.id,
-//         name: item.name
-//       });
-//     }
-//     catch (error) {
-//       return error;
-//     }
-//   }
-
-//   return true;
-// }
+  return true;
+}
 
 module.exports = {
   async create (req, res) {
@@ -221,8 +202,8 @@ module.exports = {
         clientSignatureFileName: clientSignatureFileName,
       })
       .then(async (item) => {
-        //add size tires
-        //const sizeTiresResult = await createTires(item, tireType.size, req.body.sizeTires.filter(u => u.width && u.profile && u.diameter));
+        //add inspected tires
+        const inspectedTiresResult = await createTires(item, tireType.inspected, req.body.inspectedTires.filter(u => u.location));
 
         //add installed tires
         //const installedTiresResult = await createTires(item, tireType.installed, req.body.installedTires.filter(u => u.width && u.profile && u.diameter));
@@ -233,31 +214,25 @@ module.exports = {
         //add mechanics
         //const mechanicsResult = await createMechanics(item, req.body.mechanics.filter(u => u.name));
 
-        // if (sizeTiresResult === true
-        //   && installedTiresResult === true
-        //   && dismantledTiresResult === true
-        //   && mechanicsResult === true) {
-        //   res.send({
-        //     result: true,
-        //     serviceId: item.id,
-        //   });
-        // }
-        // else {
-        //   if (sizeTiresResult !== true) tools.sendError(res, sizeTiresResult);
-        //   if (installedTiresResult !== true) tools.sendError(res, installedTiresResult);
-        //   if (dismantledTiresResult !== true) tools.sendError(res, dismantledTiresResult);
-        //   if (mechanicsResult !== true) tools.sendError(res, mechanicsResult);
-        // }
+        if (inspectedTiresResult === true) {
+          //&& installedTiresResult === true
+          //&& dismantledTiresResult === true
+          //&& mechanicsResult === true) {
+          res.send({
+            result: true,
+            serviceId: item.id,
+          });
+        }
+        else {
+          if (inspectedTiresResult !== true) {
+            tools.sendError(res, inspectedTiresResult);
+            return;
+          }
 
-        res.send({
-          result: true,
-          serviceId: item.id,
-        });
-
-
-
-
-
+          //if (installedTiresResult !== true) tools.sendError(res, installedTiresResult);
+          //if (dismantledTiresResult !== true) tools.sendError(res, dismantledTiresResult);
+          //if (mechanicsResult !== true) tools.sendError(res, mechanicsResult);
+        }
       })
       .catch((error) => tools.sendError(res, error));
     }
@@ -265,202 +240,202 @@ module.exports = {
       tools.sendError(res, error);
     }
   },
-  async getOne (req, res) {
-    try {
-      //get deposit
-      const items = await sequelize.query(`
-        select *
-        from TruckServices
-        where id = :id
-      `, {
-        type: QueryTypes.SELECT,
-        replacements: { id: req.params.id },
-      });
+  // async getOne (req, res) {
+  //   try {
+  //     //get deposit
+  //     const items = await sequelize.query(`
+  //       select *
+  //       from TruckServices
+  //       where id = :id
+  //     `, {
+  //       type: QueryTypes.SELECT,
+  //       replacements: { id: req.params.id },
+  //     });
 
-      const [item] = items.map(item => ({
-        id: item.id,
-        date: item.date,
-        ordinal: item.ordinal,
-        requestName: item.requestName,
-        saleDocument: item.saleDocument,
-        companyId: item.companyId,
-        description: item.visitDescription,
-        vehicle: {
-          name: item.vehicleName,
-          registrationNumber: item.registrationNumber,
-          type: item.vehicleType,
-          mileage: item.mileage,
-        },
-        tireDiagnostics: item.tireDiagnostics,
-        actions: {
-          tiresInspection: {
-            isChecked: item.isActionTiresInspection,
-            count: item.actionTiresInspectionCount,
-            info: item.actionTiresInspectionNote,
-          },
-          pressureRegulation: {
-            isChecked: item.isActionPressureRegulation,
-            count: item.actionPressureRegulationCount,
-            info: item.actionPressureRegulationNote,
-          },
-          wheelWashing: {
-            isChecked: item.isActionWheelWashing,
-            count: item.actionWheelWashingCount,
-            info: item.actionWheelWashingNote,
-            extraInfo: item.actionWheelWashingDetails,
-          },
-          wheelUnscrewing: {
-            isChecked: item.isActionWheelUnscrewing,
-            count: item.actionWheelUnscrewingCount,
-            info: item.actionWheelUnscrewingNote,
-            extraInfo: item.actionWheelUnscrewingDetails,
-          },
-          tireInstallation: {
-            isChecked: item.isActionTireInstallation,
-            count: item.actionTireInstallationCount,
-            info: item.actionTireInstallationNote,
-            extraInfo: item.actionTireInstallationDetails,
-          },
-          wheelBalancing: {
-            isChecked: item.isActionWheelBalancing,
-            count: item.actionWheelBalancingCount,
-            info: item.actionWheelBalancingNote,
-            extraInfo: item.actionWheelBalancingDetails,
-          },
-          wheelWeights: {
-            isChecked: item.isActionWheelWeights,
-            count: item.actionWheelWeightsCount,
-            info: item.actionWheelWeightsNote,
-            extraInfo: item.actionWheelWeightsDetails,
-          },
-          wheelCentering: {
-            isChecked: item.isActionWheelCentering,
-            count: item.actionWheelCenteringCount,
-            info: item.actionWheelCenteringNote,
-          },
-          pinsCleaning: {
-            isChecked: item.isActionPinsCleaning,
-            count: item.actionPinsCleaningCount,
-            info: item.actionPinsCleaningNote,
-          },
-          tighteningWithTorqueWrench: {
-            isChecked: item.isActionTighteningWithTorqueWrench,
-            count: item.actionTighteningWithTorqueWrenchCount,
-            info: item.actionTighteningWithTorqueWrenchNote,
-          },
-          handingOverTighteningCard: {
-            isChecked: item.isActionHandingOverTighteningCard,
-            count: item.actionHandingOverTighteningCardCount,
-            info: item.actionHandingOverTighteningCardNote,
-          },
-          pumping: {
-            isChecked: item.isActionPumping,
-            count: item.actionPumpingCount,
-            info: item.actionPumpingNote,
-            extraInfo: item.actionPumpingDetails,
-          },
-          valveChange: {
-            isChecked: item.isActionValveChange,
-            count: item.actionValveChangeCount,
-            info: item.actionValveChangeNote,
-            extraInfo: item.actionValveChangeDetails,
-          },
-          extensionInstallation: {
-            isChecked: item.isActionExtensionInstallation,
-            count: item.actionExtensionInstallationCount,
-            info: item.actionExtensionInstallationNote,
-            extraInfo: item.actionExtensionInstallationDetails,
-          },
-          deepening: {
-            isChecked: item.isActionDeepening,
-            count: item.actionDeepeningCount,
-            info: item.actionDeepeningNote,
-            f: item.isActionDeepeningF,
-            d: item.isActionDeepeningD,
-            t: item.isActionDeepeningT,
-          },
-          coldHotRepair: {
-            isChecked: item.isActionColdHotRepair,
-            count: item.actionColdHotRepairCount,
-            info: item.actionColdHotRepairNote,
-            extraInfo: item.actionColdHotRepairDetails,
-          },
-          utilization: {
-            isChecked: item.isActionUtilization,
-            count: item.actionUtilizationCount,
-            info: item.actionUtilizationNote,
-            extraInfo: item.actionUtilizationDetails,
-          },
-          driveToClient: {
-            isChecked: item.isActionDriveToClient,
-            count: item.actionDriveToClientCount,
-            info: item.actionDriveToClientNote,
-            extraInfo: item.actionDriveToClientDetails,
-          },
-          other: {
-            isChecked: item.isActionOther,
-            count: item.actionOtherCount,
-            info: item.actionOtherNote,
-            extraInfo: item.actionOtherDetails,
-          },
-        },
-        otherMaterials: item.otherMaterials,
-        recommendations: {
-          geometry: item.isGeometryRecommendation,
-          shockAbsorbers: item.isShockAbsorbersRecommendation,
-          brakes: item.isBrakesRecommendation,
-        },
-        nextVisit:{
-          date: item.nextVisitDate,
-          description: item.nextVisitDescription,
-        },
-        directoryId: item.directoryId,
-        employeeSignatureFileName: item.employeeSignatureFileName,
-        clientSignatureFileName: item.clientSignatureFileName,
-      }));
+  //     const [item] = items.map(item => ({
+  //       id: item.id,
+  //       date: item.date,
+  //       ordinal: item.ordinal,
+  //       requestName: item.requestName,
+  //       saleDocument: item.saleDocument,
+  //       companyId: item.companyId,
+  //       description: item.visitDescription,
+  //       vehicle: {
+  //         name: item.vehicleName,
+  //         registrationNumber: item.registrationNumber,
+  //         type: item.vehicleType,
+  //         mileage: item.mileage,
+  //       },
+  //       tireDiagnostics: item.tireDiagnostics,
+  //       actions: {
+  //         tiresInspection: {
+  //           isChecked: item.isActionTiresInspection,
+  //           count: item.actionTiresInspectionCount,
+  //           info: item.actionTiresInspectionNote,
+  //         },
+  //         pressureRegulation: {
+  //           isChecked: item.isActionPressureRegulation,
+  //           count: item.actionPressureRegulationCount,
+  //           info: item.actionPressureRegulationNote,
+  //         },
+  //         wheelWashing: {
+  //           isChecked: item.isActionWheelWashing,
+  //           count: item.actionWheelWashingCount,
+  //           info: item.actionWheelWashingNote,
+  //           extraInfo: item.actionWheelWashingDetails,
+  //         },
+  //         wheelUnscrewing: {
+  //           isChecked: item.isActionWheelUnscrewing,
+  //           count: item.actionWheelUnscrewingCount,
+  //           info: item.actionWheelUnscrewingNote,
+  //           extraInfo: item.actionWheelUnscrewingDetails,
+  //         },
+  //         tireInstallation: {
+  //           isChecked: item.isActionTireInstallation,
+  //           count: item.actionTireInstallationCount,
+  //           info: item.actionTireInstallationNote,
+  //           extraInfo: item.actionTireInstallationDetails,
+  //         },
+  //         wheelBalancing: {
+  //           isChecked: item.isActionWheelBalancing,
+  //           count: item.actionWheelBalancingCount,
+  //           info: item.actionWheelBalancingNote,
+  //           extraInfo: item.actionWheelBalancingDetails,
+  //         },
+  //         wheelWeights: {
+  //           isChecked: item.isActionWheelWeights,
+  //           count: item.actionWheelWeightsCount,
+  //           info: item.actionWheelWeightsNote,
+  //           extraInfo: item.actionWheelWeightsDetails,
+  //         },
+  //         wheelCentering: {
+  //           isChecked: item.isActionWheelCentering,
+  //           count: item.actionWheelCenteringCount,
+  //           info: item.actionWheelCenteringNote,
+  //         },
+  //         pinsCleaning: {
+  //           isChecked: item.isActionPinsCleaning,
+  //           count: item.actionPinsCleaningCount,
+  //           info: item.actionPinsCleaningNote,
+  //         },
+  //         tighteningWithTorqueWrench: {
+  //           isChecked: item.isActionTighteningWithTorqueWrench,
+  //           count: item.actionTighteningWithTorqueWrenchCount,
+  //           info: item.actionTighteningWithTorqueWrenchNote,
+  //         },
+  //         handingOverTighteningCard: {
+  //           isChecked: item.isActionHandingOverTighteningCard,
+  //           count: item.actionHandingOverTighteningCardCount,
+  //           info: item.actionHandingOverTighteningCardNote,
+  //         },
+  //         pumping: {
+  //           isChecked: item.isActionPumping,
+  //           count: item.actionPumpingCount,
+  //           info: item.actionPumpingNote,
+  //           extraInfo: item.actionPumpingDetails,
+  //         },
+  //         valveChange: {
+  //           isChecked: item.isActionValveChange,
+  //           count: item.actionValveChangeCount,
+  //           info: item.actionValveChangeNote,
+  //           extraInfo: item.actionValveChangeDetails,
+  //         },
+  //         extensionInstallation: {
+  //           isChecked: item.isActionExtensionInstallation,
+  //           count: item.actionExtensionInstallationCount,
+  //           info: item.actionExtensionInstallationNote,
+  //           extraInfo: item.actionExtensionInstallationDetails,
+  //         },
+  //         deepening: {
+  //           isChecked: item.isActionDeepening,
+  //           count: item.actionDeepeningCount,
+  //           info: item.actionDeepeningNote,
+  //           f: item.isActionDeepeningF,
+  //           d: item.isActionDeepeningD,
+  //           t: item.isActionDeepeningT,
+  //         },
+  //         coldHotRepair: {
+  //           isChecked: item.isActionColdHotRepair,
+  //           count: item.actionColdHotRepairCount,
+  //           info: item.actionColdHotRepairNote,
+  //           extraInfo: item.actionColdHotRepairDetails,
+  //         },
+  //         utilization: {
+  //           isChecked: item.isActionUtilization,
+  //           count: item.actionUtilizationCount,
+  //           info: item.actionUtilizationNote,
+  //           extraInfo: item.actionUtilizationDetails,
+  //         },
+  //         driveToClient: {
+  //           isChecked: item.isActionDriveToClient,
+  //           count: item.actionDriveToClientCount,
+  //           info: item.actionDriveToClientNote,
+  //           extraInfo: item.actionDriveToClientDetails,
+  //         },
+  //         other: {
+  //           isChecked: item.isActionOther,
+  //           count: item.actionOtherCount,
+  //           info: item.actionOtherNote,
+  //           extraInfo: item.actionOtherDetails,
+  //         },
+  //       },
+  //       otherMaterials: item.otherMaterials,
+  //       recommendations: {
+  //         geometry: item.isGeometryRecommendation,
+  //         shockAbsorbers: item.isShockAbsorbersRecommendation,
+  //         brakes: item.isBrakesRecommendation,
+  //       },
+  //       nextVisit:{
+  //         date: item.nextVisitDate,
+  //         description: item.nextVisitDescription,
+  //       },
+  //       directoryId: item.directoryId,
+  //       employeeSignatureFileName: item.employeeSignatureFileName,
+  //       clientSignatureFileName: item.clientSignatureFileName,
+  //     }));
 
-      //const [item] = items;
+  //     //const [item] = items;
 
-      //get company
-      item.company = await Company.findOne({
-        where : { id: item.companyId },
-      });
+  //     //get company
+  //     item.company = await Company.findOne({
+  //       where : { id: item.companyId },
+  //     });
 
-      // get size tires
-      item.sizeTires = await TruckTire.findAll({
-        where : {
-          serviceId: item.id,
-          type: tireType.size,
-       },
-      });
+  //     // get size tires
+  //     item.sizeTires = await TruckTire.findAll({
+  //       where : {
+  //         serviceId: item.id,
+  //         type: tireType.size,
+  //      },
+  //     });
 
-      // get installed tires
-      item.installedTires = await TruckTire.findAll({
-        where : {
-          serviceId: item.id,
-          type: tireType.installed,
-       },
-      });
+  //     // get installed tires
+  //     item.installedTires = await TruckTire.findAll({
+  //       where : {
+  //         serviceId: item.id,
+  //         type: tireType.installed,
+  //      },
+  //     });
 
-      // get dismantled tires
-      item.dismantledTires = await TruckTire.findAll({
-        where : {
-          serviceId: item.id,
-          type: tireType.dismantled,
-       },
-      });
+  //     // get dismantled tires
+  //     item.dismantledTires = await TruckTire.findAll({
+  //       where : {
+  //         serviceId: item.id,
+  //         type: tireType.dismantled,
+  //      },
+  //     });
 
-      // get mechanics
-      item.mechanics = await Mechanic.findAll({
-        attributes: [ 'name' ],
-        where : {
-          serviceId: item.id
-       },
-      });
+  //     // get mechanics
+  //     item.mechanics = await Mechanic.findAll({
+  //       attributes: [ 'name' ],
+  //       where : {
+  //         serviceId: item.id
+  //      },
+  //     });
 
-      res.send({ item });
-    } catch (error) {
-      tools.sendError(res, error);
-    }
-  },
+  //     res.send({ item });
+  //   } catch (error) {
+  //     tools.sendError(res, error);
+  //   }
+  // },
 }

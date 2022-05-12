@@ -229,10 +229,25 @@ module.exports = {
           });
         }
         else {
-          if (sizeTiresResult !== true) tools.sendError(res, sizeTiresResult);
-          if (installedTiresResult !== true) tools.sendError(res, installedTiresResult);
-          if (dismantledTiresResult !== true) tools.sendError(res, dismantledTiresResult);
-          if (mechanicsResult !== true) tools.sendError(res, mechanicsResult);
+          if (sizeTiresResult !== true) {
+            tools.sendError(res, sizeTiresResult);
+            return;
+          }
+
+          if (installedTiresResult !== true) {
+            tools.sendError(res, installedTiresResult);
+            return;
+          }
+
+          if (dismantledTiresResult !== true) {
+            tools.sendError(res, dismantledTiresResult);
+            return;
+          }
+
+          if (mechanicsResult !== true) {
+            tools.sendError(res, mechanicsResult);
+            return;
+          }
         }
       })
       .catch((error) => tools.sendError(res, error));

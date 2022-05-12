@@ -103,10 +103,7 @@ module.exports = {
         //add tires
         const tiresResult = await createTires(item, req.body.tires.filter(u => u.width && u.profile && u.diameter));
 
-        console.log('TIRES RESULT');
-
         if (tiresResult === true) {
-          console.log('OK');
           res.send({
             result: true,
             serviceId: item.id,
