@@ -19,13 +19,15 @@ async function createTires(request, type, array) {
         type: type,
         location: item.location,
         status: item.status,
-        //width: item.width,
-        //profile: item.profile,
-        //diameter: item.diameter,
-        //serial: item.serial,
-        //brand: item.brand,
+        width: item.width,
+        profile: item.profile,
+        diameter: item.diameter,
+        dot: item.dot,
+        serial: item.serial,
+        brand: item.brand,
         tread: item.tread,
-        pressure: item.pressure
+        pressure: item.pressure,
+        note: item.note
       });
     }
     catch (error) {
@@ -206,18 +208,14 @@ module.exports = {
         const inspectedTiresResult = await createTires(item, tireType.inspected, req.body.inspectedTires.filter(u => u.location));
 
         //add installed tires
-        //const installedTiresResult = await createTires(item, tireType.installed, req.body.installedTires.filter(u => u.width && u.profile && u.diameter));
+        const installedTiresResult = await createTires(item, tireType.installed, req.body.installedTires.filter(u => u.width && u.profile && u.diameter));
 
-        //add dismantled tires
-        //const dismantledTiresResult = await createTires(item, tireType.dismantled, req.body.dismantledTires.filter(u => u.width && u.profile && u.diameter));
+        //add deposit tires
+        const depositTiresResult = await createTires(item, tireType.deposit, req.body.depositTires.filter(u => u.width && u.profile && u.diameter));
 
-        //add mechanics
-        //const mechanicsResult = await createMechanics(item, req.body.mechanics.filter(u => u.name));
-
-        if (inspectedTiresResult === true) {
-          //&& installedTiresResult === true
-          //&& dismantledTiresResult === true
-          //&& mechanicsResult === true) {
+        if (inspectedTiresResult === true
+          && installedTiresResult === true
+          && depositTiresResult === true) {
           res.send({
             result: true,
             serviceId: item.id,
@@ -229,9 +227,15 @@ module.exports = {
             return;
           }
 
-          //if (installedTiresResult !== true) tools.sendError(res, installedTiresResult);
-          //if (dismantledTiresResult !== true) tools.sendError(res, dismantledTiresResult);
-          //if (mechanicsResult !== true) tools.sendError(res, mechanicsResult);
+          if (installedTiresResult !== true) {
+            tools.sendError(res, installedTiresResult);
+            return;
+          }
+
+          if (depositTiresResult !== true) {
+            tools.sendError(res, depositTiresResult);
+            return;
+          }
         }
       })
       .catch((error) => tools.sendError(res, error));

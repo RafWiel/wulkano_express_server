@@ -1,9 +1,9 @@
-const inspected = 0;
-const installed = 1;
-const dismantled = 2;
+const inspected = 1;
+const installed = 2;
+const deposit = 3;
 
 module.exports = {
   inspected,
   installed,
-  dismantled,
+  deposit,
 };

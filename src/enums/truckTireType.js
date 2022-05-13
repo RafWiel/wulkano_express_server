@@ -1,6 +1,6 @@
-const size = 0;
-const installed = 1;
-const dismantled = 2;
+const size = 1;
+const installed = 2;
+const dismantled = 3;
 
 module.exports = {
   size,
