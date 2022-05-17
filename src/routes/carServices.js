@@ -3,5 +3,5 @@ const clientPolicies = require('../policies/clients')
 
 module.exports = (app) => {
   app.post('/service/cars', clientPolicies.create, carServices.create);
-  //app.get('/service/cars/:id', carServices.getOne);
+  app.get('/service/cars/:id', carServices.getOne);
 }

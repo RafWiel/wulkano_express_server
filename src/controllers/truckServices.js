@@ -410,8 +410,6 @@ module.exports = {
         clientSignatureFileName: item.clientSignatureFileName,
       }));
 
-      //const [item] = items;
-
       //get company
       item.company = await Company.findOne({
         where : { id: item.companyId },

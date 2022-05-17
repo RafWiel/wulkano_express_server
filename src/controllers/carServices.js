@@ -105,11 +105,11 @@ module.exports = {
         incorrectTireWearLocation: req.body.incorrectTireWearLocation,
         isGeometryRequired: req.body.isGeometryRequired,
         tireChange: req.body.tireChange,
-        isDepositTires: deposit.isDepositTires,
-        isDepositAlloys: deposit.isDepositAlloys,
-        isDepositSteels: deposit.isDepositSteels,
-        isDepositScrews: deposit.isDepositScrews,
-        isDepositHubcubs: deposit.isDepositHubcubs,
+        isDepositTires: deposit.isTires,
+        isDepositAlloys: deposit.isAlloys,
+        isDepositSteels: deposit.isSteels,
+        isDepositScrews: deposit.isScrews,
+        isDepositHubcubs: deposit.isHubcubs,
         depositTiresNote: req.body.depositTiresNote,
         depositTiresLocation: req.body.depositTiresLocation,
         visualInspectionBrakePadsFront: visualInspection.brakePads.front.status,
@@ -244,202 +244,249 @@ module.exports = {
       tools.sendError(res, error);
     }
   },
-  // async getOne (req, res) {
-  //   try {
-  //     //get deposit
-  //     const items = await sequelize.query(`
-  //       select *
-  //       from TruckServices
-  //       where id = :id
-  //     `, {
-  //       type: QueryTypes.SELECT,
-  //       replacements: { id: req.params.id },
-  //     });
+  async getOne (req, res) {
+    try {
+      //get deposit
+      const items = await sequelize.query(`
+        select *
+        from CarServices
+        where id = :id
+      `, {
+        type: QueryTypes.SELECT,
+        replacements: { id: req.params.id },
+      });
 
-  //     const [item] = items.map(item => ({
-  //       id: item.id,
-  //       date: item.date,
-  //       ordinal: item.ordinal,
-  //       requestName: item.requestName,
-  //       saleDocument: item.saleDocument,
-  //       companyId: item.companyId,
-  //       description: item.visitDescription,
-  //       vehicle: {
-  //         name: item.vehicleName,
-  //         registrationNumber: item.registrationNumber,
-  //         type: item.vehicleType,
-  //         mileage: item.mileage,
-  //       },
-  //       tireDiagnostics: item.tireDiagnostics,
-  //       actions: {
-  //         tiresInspection: {
-  //           isChecked: item.isActionTiresInspection,
-  //           count: item.actionTiresInspectionCount,
-  //           info: item.actionTiresInspectionNote,
-  //         },
-  //         pressureRegulation: {
-  //           isChecked: item.isActionPressureRegulation,
-  //           count: item.actionPressureRegulationCount,
-  //           info: item.actionPressureRegulationNote,
-  //         },
-  //         wheelWashing: {
-  //           isChecked: item.isActionWheelWashing,
-  //           count: item.actionWheelWashingCount,
-  //           info: item.actionWheelWashingNote,
-  //           extraInfo: item.actionWheelWashingDetails,
-  //         },
-  //         wheelUnscrewing: {
-  //           isChecked: item.isActionWheelUnscrewing,
-  //           count: item.actionWheelUnscrewingCount,
-  //           info: item.actionWheelUnscrewingNote,
-  //           extraInfo: item.actionWheelUnscrewingDetails,
-  //         },
-  //         tireInstallation: {
-  //           isChecked: item.isActionTireInstallation,
-  //           count: item.actionTireInstallationCount,
-  //           info: item.actionTireInstallationNote,
-  //           extraInfo: item.actionTireInstallationDetails,
-  //         },
-  //         wheelBalancing: {
-  //           isChecked: item.isActionWheelBalancing,
-  //           count: item.actionWheelBalancingCount,
-  //           info: item.actionWheelBalancingNote,
-  //           extraInfo: item.actionWheelBalancingDetails,
-  //         },
-  //         wheelWeights: {
-  //           isChecked: item.isActionWheelWeights,
-  //           count: item.actionWheelWeightsCount,
-  //           info: item.actionWheelWeightsNote,
-  //           extraInfo: item.actionWheelWeightsDetails,
-  //         },
-  //         wheelCentering: {
-  //           isChecked: item.isActionWheelCentering,
-  //           count: item.actionWheelCenteringCount,
-  //           info: item.actionWheelCenteringNote,
-  //         },
-  //         pinsCleaning: {
-  //           isChecked: item.isActionPinsCleaning,
-  //           count: item.actionPinsCleaningCount,
-  //           info: item.actionPinsCleaningNote,
-  //         },
-  //         tighteningWithTorqueWrench: {
-  //           isChecked: item.isActionTighteningWithTorqueWrench,
-  //           count: item.actionTighteningWithTorqueWrenchCount,
-  //           info: item.actionTighteningWithTorqueWrenchNote,
-  //         },
-  //         handingOverTighteningCard: {
-  //           isChecked: item.isActionHandingOverTighteningCard,
-  //           count: item.actionHandingOverTighteningCardCount,
-  //           info: item.actionHandingOverTighteningCardNote,
-  //         },
-  //         pumping: {
-  //           isChecked: item.isActionPumping,
-  //           count: item.actionPumpingCount,
-  //           info: item.actionPumpingNote,
-  //           extraInfo: item.actionPumpingDetails,
-  //         },
-  //         valveChange: {
-  //           isChecked: item.isActionValveChange,
-  //           count: item.actionValveChangeCount,
-  //           info: item.actionValveChangeNote,
-  //           extraInfo: item.actionValveChangeDetails,
-  //         },
-  //         extensionInstallation: {
-  //           isChecked: item.isActionExtensionInstallation,
-  //           count: item.actionExtensionInstallationCount,
-  //           info: item.actionExtensionInstallationNote,
-  //           extraInfo: item.actionExtensionInstallationDetails,
-  //         },
-  //         deepening: {
-  //           isChecked: item.isActionDeepening,
-  //           count: item.actionDeepeningCount,
-  //           info: item.actionDeepeningNote,
-  //           f: item.isActionDeepeningF,
-  //           d: item.isActionDeepeningD,
-  //           t: item.isActionDeepeningT,
-  //         },
-  //         coldHotRepair: {
-  //           isChecked: item.isActionColdHotRepair,
-  //           count: item.actionColdHotRepairCount,
-  //           info: item.actionColdHotRepairNote,
-  //           extraInfo: item.actionColdHotRepairDetails,
-  //         },
-  //         utilization: {
-  //           isChecked: item.isActionUtilization,
-  //           count: item.actionUtilizationCount,
-  //           info: item.actionUtilizationNote,
-  //           extraInfo: item.actionUtilizationDetails,
-  //         },
-  //         driveToClient: {
-  //           isChecked: item.isActionDriveToClient,
-  //           count: item.actionDriveToClientCount,
-  //           info: item.actionDriveToClientNote,
-  //           extraInfo: item.actionDriveToClientDetails,
-  //         },
-  //         other: {
-  //           isChecked: item.isActionOther,
-  //           count: item.actionOtherCount,
-  //           info: item.actionOtherNote,
-  //           extraInfo: item.actionOtherDetails,
-  //         },
-  //       },
-  //       otherMaterials: item.otherMaterials,
-  //       recommendations: {
-  //         geometry: item.isGeometryRecommendation,
-  //         shockAbsorbers: item.isShockAbsorbersRecommendation,
-  //         brakes: item.isBrakesRecommendation,
-  //       },
-  //       nextVisit:{
-  //         date: item.nextVisitDate,
-  //         description: item.nextVisitDescription,
-  //       },
-  //       directoryId: item.directoryId,
-  //       employeeSignatureFileName: item.employeeSignatureFileName,
-  //       clientSignatureFileName: item.clientSignatureFileName,
-  //     }));
+      const [item] = items.map(item => ({
+        id: item.id,
+        date: item.date,
+        ordinal: item.ordinal,
+        requestName: item.requestName,
+        saleDocument: item.saleDocument,
+        clientId: item.clientId,
+        description: item.visitDescription,
+        vehicle: {
+          name: item.vehicleName,
+          registrationNumber: item.registrationNumber,
+          type: item.vehicleType,
+          mileage: item.mileage,
+        },
+        incorrectTireWearLocation: item.incorrectTireWearLocation,
+        isGeometryRequired: item.isGeometryRequired,
+        tireChange: item.tireChange,
+        deposit: {
+          isTires: item.isDepositTires,
+          isAlloys: item.isDepositAlloys,
+          isSteels: item.isDepositSteels,
+          isScrews: item.isDepositScrews,
+          isHubcubs: item.isDepositHubcubs,
+        },
+        depositTiresNote: item.depositTiresNote,
+        depositTiresLocation: item.depositTiresLocation,
+        visualInspection: {
+          brakePads: {
+            front: {
+              status: item.visualInspectionBrakePadsFront,
+            },
+            rear: {
+              status: item.visualInspectionBrakePadsRear,
+            },
+          },
+          brakeDiscs: {
+            front: {
+              status: item.visualInspectionBrakeDiscsFront,
+            },
+            rear: {
+              status: item.visualInspectionBrakeDiscsRear,
+            },
+          },
+          shockAbsorbers: {
+            status: item.visualInspectionShockAbsorbers,
+          },
+          suspension: {
+            status: item.visualInspectionSuspension,
+          },
+          airco: {
+            status: item.visualInspectionAirco,
+          },
+          oil: {
+            status: item.visualInspectionOil,
+          },
+          lights: {
+            status: item.visualInspectionLights,
+          },
+          washingFluid: {
+            status: item.visualInspectionWashingFluid,
+          },
+          brakeFluid: {
+            status: item.visualInspectionBrakeFluid,
+          },
+          coolingFluid: {
+            status: item.visualInspectionCoolingFluid,
+          },
+          wipers: {
+            status: item.visualInspectionWipers,
+          },
+          other: {
+            status: item.visualInspectionOther,
+            extraInfo: item.visualInspectionOtherDetails,
+          },
+        },
+        actions: {
+          screwing: {
+            isChecked: item.isActionScrewing,
+            count: item.actionScrewingCount,
+            price: item.actionScrewingPrice,
+          },
+          installation: {
+            isChecked: item.isActionInstallation,
+            count: item.actionInstallationCount,
+            price: item.actionInstallationPrice,
+          },
+          wheelBalancing: {
+            isChecked: item.isActionWheelBalancing,
+            count: item.actionWheelBalancingCount,
+            price: item.actionWheelBalancingPrice,
+            isSteel: item.isActionWheelBalancingSteel,
+            isAlloy: item.isActionWheelBalancingAlloy,
+          },
+          tireRepair: {
+            isChecked: item.isActionTireRepair,
+            count: item.actionTireRepairCount,
+            price: item.actionTireRepairPrice,
+          },
+          rimStraightening: {
+            isChecked: item.isActionRimStraightening,
+            count: item.actionRimStraighteningCount,
+            price: item.actionRimStraighteningPrice,
+            isSteel: item.isActionRimStraighteningSteel,
+            isAlloy: item.isActionRimStraighteningAlloy,
+          },
+          airValve: {
+            isChecked: item.isActionAirValve,
+            count: item.actionAirValveCount,
+            price: item.actionAirValvePrice,
+            extraInfo: item.actionAirValveDetails,
+          },
+          nitrogenFill: {
+            isChecked: item.isActionNitrogenFill,
+            count: item.actionNitrogenFillCount,
+            price: item.actionNitrogenFillPrice,
+          },
+          utilization: {
+            isChecked: item.isActionUtilization,
+            count: item.actionUtilizationCount,
+            price: item.actionUtilizationPrice,
+          },
+        },
+        fastFit: {
+          brakePads: {
+            isChecked: item.isFastFitBrakePads,
+            count: item.fastFitBrakePadsCount,
+            price: item.fastFitBrakePadsPrice,
+            isFront: item.isFastFitBrakePadsFront,
+            isRear: item.isFastFitBrakePadsRear,
+          },
+          brakeDiscs: {
+            isChecked: item.isFastFitBrakeDiscs,
+            count: item.fastFitBrakeDiscsCount,
+            price: item.fastFitBrakeDiscsPrice,
+            isFront: item.isFastFitBrakeDiscsFront,
+            isRear: item.isFastFitBrakeDiscsRear,
+          },
+          shockAbsorbers: {
+            isChecked: item.isFastFitShockAbsorbers,
+            count: item.fastFitShockAbsorbersCount,
+            price: item.fastFitShockAbsorbersPrice,
+            isFront: item.isFastFitShockAbsorbersFront,
+            isRear: item.isFastFitShockAbsorbersRear,
+          },
+          geometry: {
+            isChecked: item.isFastFitGeometry,
+            count: item.fastFitGeometryCount,
+            price: item.fastFitGeometryPrice,
+          },
+          fuelFilter: {
+            isChecked: item.isFastFitFuelFilter,
+            count: item.fastFitFuelFilterCount,
+            price: item.fastFitFuelFilterPrice,
+          },
+        },
+        inspection: {
+          oil: {
+            isChecked: item.isInspectionOilChange,
+            count: item.inspectionOilChangeCount,
+            price: item.inspectionOilChangePrice,
+          },
+          oilFilter: {
+            isChecked: item.isInspectionOilFilterChange,
+            count: item.inspectionOilFilterChangeCount,
+            price: item.inspectionOilFilterChangePrice,
+          },
+          airFilter: {
+            isChecked: item.isInspectionAirFilterChange,
+            count: item.inspectionAirFilterChangeCount,
+            price: item.inspectionAirFilterChangePrice,
+          },
+          interiorFilter: {
+            isChecked: item.isInspectionInteriorFilterChange,
+            count: item.inspectionInteriorFilterChangeCount,
+            price: item.inspectionInteriorFilterChangePrice,
+          },
+          airco: {
+            isChecked: item.isInspectionAirco,
+            count: item.inspectionAircoCount,
+            price: item.inspectionAircoPrice,
+            isCleaning: item.isInspectionAircoCleaning,
+            isFilter: item.isInspectionAircoFilter,
+            isFilling: item.isInspectionAircoFilling,
+          },
+          other: {
+            isChecked: item.isInspectionOther,
+            count: item.inspectionOtherCount,
+            price: item.inspectionOtherPrice,
+            extraInfo: item.inspectionOtherDetails,
+          },
+        },
+        directoryId: item.directoryId,
+        employeeSignatureFileName: item.employeeSignatureFileName,
+        clientSignatureFileName: item.clientSignatureFileName,
+      }));
 
-  //     //const [item] = items;
+      //get company
+      item.client = await Client.findOne({
+        where : { id: item.clientId },
+      });
 
-  //     //get company
-  //     item.company = await Company.findOne({
-  //       where : { id: item.companyId },
-  //     });
+      // get inspected tires
+      item.inspectedTires = await CarTire.findAll({
+        attributes: [ 'location', 'status', 'tread', 'pressure' ],
+        where : {
+          serviceId: item.id,
+          type: tireType.inspected,
+       },
+      });
 
-  //     // get size tires
-  //     item.sizeTires = await TruckTire.findAll({
-  //       where : {
-  //         serviceId: item.id,
-  //         type: tireType.size,
-  //      },
-  //     });
+      // get installed tires
+      item.installedTires = await CarTire.findAll({
+        attributes: [ 'location', 'width', 'profile', 'diameter', 'dot', 'brand' ],
+        where : {
+          serviceId: item.id,
+          type: tireType.installed,
+       },
+      });
 
-  //     // get installed tires
-  //     item.installedTires = await TruckTire.findAll({
-  //       where : {
-  //         serviceId: item.id,
-  //         type: tireType.installed,
-  //      },
-  //     });
+      // get dismantled tires
+      item.depositTires = await CarTire.findAll({
+        attributes: [ 'width', 'profile', 'diameter', 'dot', 'brand', 'tread', 'note' ],
+        where : {
+          serviceId: item.id,
+          type: tireType.deposit,
+       },
+      });
 
-  //     // get dismantled tires
-  //     item.dismantledTires = await TruckTire.findAll({
-  //       where : {
-  //         serviceId: item.id,
-  //         type: tireType.dismantled,
-  //      },
-  //     });
-
-  //     // get mechanics
-  //     item.mechanics = await Mechanic.findAll({
-  //       attributes: [ 'name' ],
-  //       where : {
-  //         serviceId: item.id
-  //      },
-  //     });
-
-  //     res.send({ item });
-  //   } catch (error) {
-  //     tools.sendError(res, error);
-  //   }
-  // },
+      res.send({ item });
+    } catch (error) {
+      tools.sendError(res, error);
+    }
+  },
 }

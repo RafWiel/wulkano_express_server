@@ -159,28 +159,3 @@ module.exports = {
     }
   },
 }
-
-// select
-//           a.id,
-//           a.date,
-//           a.requestName,
-//           c.name as clientName,
-//           c.companyName,
-//           c.phoneNumber,
-//           :depositType as requestType
-//         from Deposits a
-//         left join Clients c on a.clientId = c.id
-//         where (
-//           a.requestName like :search or
-//           c.name like :search or
-//           c.companyName like :search or
-//           c.phoneNumber like :search
-//         )
-//         and case when :startDate is not null then a.date >= :startDate else true end
-//         and case when :stopDate is not null then a.date < :stopDate else true end
-//         and case when :depositType is not null then a.id is not null else a.id is null end
-//         union
-//         select * from TruckServices
-//         order by ${sortColumn} ${order}
-//         limit 50
-//         offset :offset
