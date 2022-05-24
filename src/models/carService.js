@@ -68,7 +68,7 @@ module.exports = (sequelize, DataTypes) =>
       type: DataTypes.BOOLEAN,
       allowNull: true,
     },
-    isDepositHubcubs: {
+    isDepositHubcups: {
       type: DataTypes.BOOLEAN,
       allowNull: true,
     },

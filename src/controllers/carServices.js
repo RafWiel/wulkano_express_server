@@ -109,7 +109,7 @@ module.exports = {
         isDepositAlloys: deposit.isAlloys,
         isDepositSteels: deposit.isSteels,
         isDepositScrews: deposit.isScrews,
-        isDepositHubcubs: deposit.isHubcubs,
+        isDepositHubcups: deposit.isHubcups,
         depositTiresNote: req.body.depositTiresNote,
         depositTiresLocation: req.body.depositTiresLocation,
         visualInspectionBrakePadsFront: visualInspection.brakePads.front.status,
@@ -278,7 +278,7 @@ module.exports = {
           isAlloys: item.isDepositAlloys,
           isSteels: item.isDepositSteels,
           isScrews: item.isDepositScrews,
-          isHubcubs: item.isDepositHubcubs,
+          isHubcups: item.isDepositHubcups,
         },
         depositTiresNote: item.depositTiresNote,
         depositTiresLocation: item.depositTiresLocation,
@@ -468,7 +468,7 @@ module.exports = {
 
       // get installed tires
       item.installedTires = await CarTire.findAll({
-        attributes: [ 'location', 'width', 'profile', 'diameter', 'dot', 'brand' ],
+        attributes: [ 'location', 'width', 'profile', 'diameter', 'dot', 'brand', 'serial' ],
         where : {
           serviceId: item.id,
           type: tireType.installed,
