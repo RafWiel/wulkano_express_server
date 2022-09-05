@@ -1,3 +1,4 @@
+const dotenv = require('dotenv');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -7,10 +8,19 @@ const {sequelize} = require('./models');
 const fs = require('fs');
 const path = require('path');
 
+dotenv.config({ path: '.env' });
+
 const app = express();
 app.use(cors());
 app.use(logger('combined'));
 app.use(bodyParser.json());
+
+//todo passport
+//temps
+// const users =
+// [
+//   { id: 1, name: 'User' }
+// ];
 
 // load routes
 fs.readdirSync(`${__dirname}/routes`)
