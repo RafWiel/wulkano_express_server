@@ -1,6 +1,6 @@
 const signatures = require('../controllers/signatures');
+const authorizationMiddleware = require('../middlewares/authorization');
 
 module.exports = (app) => {
-  app.get('/signatures', signatures.get);
-
+  app.get('/signatures', authorizationMiddleware.filter, signatures.get);
 }

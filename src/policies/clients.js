@@ -1,7 +1,10 @@
 const Joi = require('joi');
+const authorizationMiddleware = require('../middlewares/authorization');
 
 module.exports = {
   create (req, res, next) {
+    authorizationMiddleware.filter(req, res, next);
+
     const schema = Joi.object({
       name: Joi.string(),
       companyName: Joi.string().allow(null, ''),

@@ -1,5 +1,6 @@
 const mechanics = require('../controllers/mechanics');
+const authorizationMiddleware = require('../middlewares/authorization');
 
 module.exports = (app) => {
-  app.get('/mechanics/names', mechanics.getNames);
+  app.get('/mechanics/names', authorizationMiddleware.filter, mechanics.getNames);
 }
