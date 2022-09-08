@@ -20,6 +20,8 @@
   },
   "homepage": "https://github.com/RafWiel/wulkano_express_server#readme",
   "dependencies": {
+    "bcrypt": "^5.0.1",
+    "bluebird": "^3.7.2",
     "body-parser": "^1.20.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.2",
