@@ -30,24 +30,27 @@ module.exports = {
     })
     .catch((error) => tools.sendError(res, error));
   },
-  login (req, res) {
-    //temp
-    const users =
-    [
-      { id: 1, username: 'user' }
-    ];
-
-    console.log('login');
+  async login (req, res) {
     console.log(req.body);
-    const {username} = req.body;
+    const {userName, password} = req.body;
 
-    if (!username) {
-      return tools.sendAuthorizationError(res);
+    if (!userName || !password) {
+      return tools.sendBadRequestError(res, 'UserName or password missing');
     }
 
-    const user = users.find(u => u.username === username);
+    // verify username
+    var user = await User.findOne({
+      where: { userName: userName }
+    });
+
     if (!user) {
-      return tools.sendAuthorizationError(res);
+      return tools.sendLoginError(res, 'UserName not found');
+    }
+
+    // verify password
+    const isValidPassword = await user.comparePassword(password);
+    if (!isValidPassword) {
+      return tools.sendLoginError(res, 'Invalid password');
     }
 
     const payload = {
