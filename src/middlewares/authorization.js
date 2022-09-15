@@ -8,6 +8,8 @@ module.exports = {
       return tools.sendAuthorizationError(res);
     }
 
+    //console.log('Auth token:', token);
+
     jwt.verify(token, process.env.JWT_SECRET, (error) => {
       if (error) {
         return tools.sendAuthorizationError(res, error);
