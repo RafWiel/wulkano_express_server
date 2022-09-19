@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) =>
-  sequelize.define('TruckService', {
+  sequelize.define('truck_service', {
     date: {
       type: DataTypes.DATE,
       allowNull: false
@@ -369,5 +369,6 @@ module.exports = (sequelize, DataTypes) =>
       allowNull: false
     },
   }, {
-    timestamps: false
+    timestamps: false,
+    underscored: true,
   });

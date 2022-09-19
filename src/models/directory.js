@@ -1,9 +1,10 @@
 module.exports = (sequelize, DataTypes) =>
-  sequelize.define('Directory', {
+  sequelize.define('directory', {
     path: {
       type: DataTypes.STRING(128),
       allowNull: true,
     },
   }, {
-    timestamps: false
+    timestamps: false,
+    underscored: true,
   });

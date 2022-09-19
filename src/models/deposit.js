@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) =>
-  sequelize.define('Deposit', {
+  sequelize.define('deposit', {
     date: {
       type: DataTypes.DATE,
       allowNull: false
@@ -57,5 +57,6 @@ module.exports = (sequelize, DataTypes) =>
       allowNull: false
     },
   }, {
-    timestamps: false
+    timestamps: false,
+    underscored: true,
   });

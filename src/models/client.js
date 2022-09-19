@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) =>
-  sequelize.define('Client', {
+  sequelize.define('client', {
     name: {
       type: DataTypes.STRING(64),
       allowNull: false,
@@ -19,5 +19,6 @@ module.exports = (sequelize, DataTypes) =>
       unique: true,
     },
   }, {
-    timestamps: false
+    timestamps: false,
+    underscored: true,
   });

@@ -61,7 +61,7 @@ module.exports = {
     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 3600 * 12 });
 
     res.send({
-      token: token
+      token: token,
     });
   },
 }
