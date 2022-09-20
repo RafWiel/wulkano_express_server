@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) =>
-  sequelize.define('company', {
+  sequelize.define('Company', {
     name: {
       type: DataTypes.STRING(64),
       allowNull: false,
@@ -25,5 +25,4 @@ module.exports = (sequelize, DataTypes) =>
     },
   }, {
     timestamps: false,
-    underscored: true,
   });

@@ -13,7 +13,7 @@ async function hashPassword (user) {
 }
 
 module.exports = (sequelize, DataTypes) => {
-  const user = sequelize.define('user', {
+  const user = sequelize.define('User', {
     userName: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -40,7 +40,6 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     timestamps: false,
-    underscored: true,
     hooks: {
       // beforeCreate: hashPassword,
       // beforeUpdate: hashPassword,

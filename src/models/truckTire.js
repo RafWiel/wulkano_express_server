@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) =>
-  sequelize.define('truck_tire', {
+  sequelize.define('TruckTire', {
     serviceId: {
       type: DataTypes.INTEGER,
       allowNull: false
@@ -42,5 +42,4 @@ module.exports = (sequelize, DataTypes) =>
     },
   }, {
     timestamps: false,
-    underscored: true,
   });
