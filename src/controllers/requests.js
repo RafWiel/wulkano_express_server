@@ -16,7 +16,7 @@ module.exports = {
 
       // sorting columns
       const sortColumns = ['date', 'requestName', 'clientName', 'companyName', 'phoneNumber', 'requestType'];
-      const sortColumn = req.query['sort-column'] ? sortColumns[req.query['sort-column']] : 'a.date';
+      const sortColumn = req.query['sort-column'] ? sortColumns[req.query['sort-column']] : 'date';
       const order = sortOrder.getSqlKeyword(req.query['sort-order']);
 
       // set filter date
@@ -64,7 +64,7 @@ module.exports = {
       // run query
       sequelize.query(`
         select
-          :depositType || '_' || a.id as id,
+          concat(:depositType, '_', a.id) as id,
           a.date,
           a.requestName,
           c.name as clientName,
@@ -86,7 +86,7 @@ module.exports = {
         union
 
         select
-          :truckServiceType || '_' || a.id as id,
+          concat(:truckServiceType, '_', a.id) as id,
           a.date,
           a.requestName,
           '' as clientName,
@@ -107,7 +107,7 @@ module.exports = {
         union
 
         select
-          :carServiceType || '_' || a.id as id,
+          concat(:carServiceType, '_', a.id) as id,
           a.date,
           a.requestName,
           c.name as clientName,
