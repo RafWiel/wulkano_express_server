@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) =>
     },
     clientId: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
     tiresNote: {
       type: DataTypes.STRING(512),

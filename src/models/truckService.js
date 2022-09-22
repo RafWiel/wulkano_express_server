@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) =>
     },
     companyId: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
     visitDescription: {
       type: DataTypes.STRING(128),
