@@ -9,6 +9,7 @@ module.exports = {
       ),
       firstName: Joi.string().allow(null, ''),
       lastName: Joi.string().allow(null, ''),
+      isAccountManager: Joi.boolean().allow(null, false),
     });
 
     const {error} = schema.validate(req.body);

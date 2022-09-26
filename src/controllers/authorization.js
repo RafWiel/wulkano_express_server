@@ -15,6 +15,7 @@ module.exports = {
           password: req.body.password,
           firstName: req.body.firstName,
           lastName: req.body.lastName,
+          isAccountManager: req.body.isAccountManager,
         })
         .then((user) => {
           res.send({
@@ -62,6 +63,7 @@ module.exports = {
 
     res.send({
       token: token,
+      isAccountManager: user.isAccountManager,
     });
   },
 }

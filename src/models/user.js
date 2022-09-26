@@ -37,7 +37,11 @@ module.exports = (sequelize, DataTypes) => {
         const space = this.lastName ? ' ' : ''
         return `${this.firstName}${space}${this.lastName}`;
       },
-    }
+    },
+    isAccountManager: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true
+    },
   }, {
     timestamps: false,
     hooks: {
