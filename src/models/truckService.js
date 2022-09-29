@@ -350,7 +350,7 @@ module.exports = (sequelize, DataTypes) =>
     },
     nextVisitDate: {
       type: DataTypes.DATE,
-      allowNull: false
+      allowNull: true,
     },
     nextVisitDescription: {
       type: DataTypes.STRING(512),

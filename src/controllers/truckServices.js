@@ -14,6 +14,8 @@ async function createTires(request, type, array) {
   for (let i = 0; i < array.length; i++) {
     const item = array[i];
 
+    console.log('TUTAJ');
+
     try {
       await TruckTire.create({
         serviceId: request.id,
