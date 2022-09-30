@@ -7,6 +7,7 @@ const config = require('./config/config');
 const {sequelize} = require('./models');
 const fs = require('fs');
 const path = require('path');
+const helmet = require("helmet");
 
 dotenv.config({ path: '.env' });
 
@@ -14,6 +15,7 @@ const app = express();
 app.use(cors());
 app.use(logger('combined'));
 app.use(bodyParser.json());
+app.use(helmet());
 
 // load routes
 fs.readdirSync(`${__dirname}/routes`)
