@@ -1,5 +1,6 @@
 const tools = require('../misc/tools');
 const jwt = require('jsonwebtoken');
+const config = require('../config/config');
 const {User} = require('../models');
 
 module.exports = {
@@ -31,7 +32,7 @@ module.exports = {
       username: user.username
     };
 
-    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 3600 * 24 });
+    const token = jwt.sign(payload, config.authentication.jwtSecret, { expiresIn: 3600 * 24 });
 
     res.send({
       token: token,

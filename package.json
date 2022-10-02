@@ -3,6 +3,18 @@
   "version": "1.0.0",
   "description": "Wulkano workshop service",
   "main": "index.js",
+  "bin": "src/app.js",
+  "pkg": {
+    "assets": [
+      "node_modules/**/*",
+      "signatures/**/*"
+    ],
+    "outputPath": "dist",
+    "scripts": "src/**/*.js",
+    "targets": [
+      "node14-windows-x64"
+    ]
+  },
   "scripts": {
     "start": "node src/app.js",
     "local": "nodemon --watch src src/app.js --exec \"npm run lint && node\"",

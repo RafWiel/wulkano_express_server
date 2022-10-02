@@ -3,41 +3,16 @@ const path = require('path');
 const fs = require('fs');
 const {Directory} = require('../models');
 
+function getDir() {
+  if (process.pkg) {
+    console.log('PROCESS PKG', process.execPath + '/..');
+      return path.resolve(process.execPath + '/..');
+  } else {
+    return path.join(require.main ? require.main.path : process.cwd(), '..');
+  }
+}
+
 module.exports = {
-  async get1 (req, res) {
-    try {
-      //get directory path
-      let directory = await Directory.findOne({
-        where : {
-          id: req.query.dir
-         }
-      });
-
-      let filePath = path.join(__dirname, '..', '..', directory.path);
-      filePath = path.join(filePath, req.query.sig);
-
-      //check if exists
-      if (!fs.existsSync(filePath)) {
-        res.set('Content-Type', 'text/plain');
-          res.status(404).end('Not found');
-      }
-
-      //read file
-      const s = fs.createReadStream(filePath);
-      s.on('open', function () {
-          res.set('Content-Type', 'image/png');
-          s.pipe(res);
-      });
-
-      s.on('error', function () {
-          res.set('Content-Type', 'text/plain');
-          res.status(404).end('Not found');
-      });
-    }
-    catch (error) {
-      tools.sendError(res, error);
-    }
-  },
   async get (req, res) {
     try {
       //get directory path
@@ -47,7 +22,7 @@ module.exports = {
          }
       });
 
-      let filePath = path.join(__dirname, '..', '..', directory.path);
+      let filePath = path.join(getDir(), directory.path);
       filePath = path.join(filePath, req.query.sig);
 
       //check if exists

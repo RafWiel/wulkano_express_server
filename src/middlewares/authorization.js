@@ -1,4 +1,5 @@
 const tools = require('../misc/tools');
+const config = require('../config/config');
 const jwt = require('jsonwebtoken');
 
 module.exports = {
@@ -10,7 +11,7 @@ module.exports = {
 
     //console.log('Auth token:', token);
 
-    jwt.verify(token, process.env.JWT_SECRET, (error) => {
+    jwt.verify(token, config.authentication.jwtSecret, (error) => {
       if (error) {
         return tools.sendAuthorizationError(res, error);
       }

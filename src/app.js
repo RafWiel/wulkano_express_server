@@ -27,12 +27,16 @@ fs.readdirSync(`${__dirname}/routes`)
 // db table relations
 require('./database/tableRelations');
 
+const message = `Wulkano Workshop server listening on port ${config.port}`;
 const isReset = 0;
 
 sequelize.sync({force: isReset})
 .then(() => {
   app.listen(config.port, () => {
-    console.log(`Wulkano Workshop server listening on port ${config.port}`)
+    console.log(message);
   });
 });
 
+app.get('/', (req, res) => {
+  res.send(message);
+});
