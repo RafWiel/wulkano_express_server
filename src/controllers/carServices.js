@@ -244,6 +244,27 @@ module.exports = {
       tools.sendError(res, error);
     }
   },
+  async update (req, res) {
+    try {
+      console.log(req.body);
+
+      const {id, saleDocument} = req.body;
+
+      CarService.update(
+        { saleDocument: saleDocument },
+        { where: { id: id } }
+      )
+      .then((result) => {
+        res.send({
+          result: Boolean(result)
+        });
+      })
+      .catch((error) => tools.sendError(res, error));
+    }
+    catch (error) {
+      tools.sendError(res, error);
+    }
+  },
   async getOne (req, res) {
     try {
       //get deposit
