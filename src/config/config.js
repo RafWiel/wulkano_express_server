@@ -6,11 +6,11 @@ module.exports = {
   port: process.env.PORT || 3000,
   db: {
     database: process.env.DB_NAME || 'Wulkano',
-    user: process.env.DB_USER || 'wulkano',
-    password: process.env.DB_PASSWORD || 'wulkano',
+    user: process.env.DB_USER || 'Wulkano',
+    password: process.env.DB_PASSWORD || 'HasloDS!',
     options: {
       dialect: process.env.DIALECT || 'mysql',
-      host: process.env.HOST || 'localhost',
+      host: process.env.HOST || '192.168.1.5',
     },
   },
   authentication: {
