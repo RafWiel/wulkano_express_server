@@ -1,2 +1,2 @@
 @echo off
-pkg package.json
+npm run build

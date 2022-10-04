@@ -3,15 +3,6 @@ const path = require('path');
 const fs = require('fs');
 const {Directory} = require('../models');
 
-function getDir() {
-  if (process.pkg) {
-    console.log('PROCESS PKG', process.execPath + '/..');
-      return path.resolve(process.execPath + '/..');
-  } else {
-    return path.join(require.main ? require.main.path : process.cwd(), '..');
-  }
-}
-
 module.exports = {
   async get (req, res) {
     try {
@@ -22,7 +13,7 @@ module.exports = {
          }
       });
 
-      let filePath = path.join(getDir(), directory.path);
+      let filePath = path.join(tools.getDir(), directory.path);
       filePath = path.join(filePath, req.query.sig);
 
       //check if exists

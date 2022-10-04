@@ -9,7 +9,11 @@ const fs = require('fs');
 const path = require('path');
 const helmet = require("helmet");
 
-dotenv.config({ path: '.env' });
+if (process.pkg) {
+  const envPath = path.join(__dirname, '../.env.production');
+  dotenv.config({ path: envPath });
+}
+else dotenv.config();
 
 const app = express();
 app.use(cors());

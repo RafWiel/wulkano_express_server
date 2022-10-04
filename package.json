@@ -18,7 +18,8 @@
   "scripts": {
     "start": "node src/app.js",
     "local": "nodemon --watch src src/app.js --exec \"npm run lint && node\"",
-    "lint": "eslint **/*.js"
+    "lint": "eslint **/*.js",
+    "build": "pkg package.json"
   },
   "repository": {
     "type": "git",
