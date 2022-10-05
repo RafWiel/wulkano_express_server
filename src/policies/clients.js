@@ -3,6 +3,7 @@ const Joi = require('joi');
 module.exports = {
   create (req, res, next) {
     const schema = Joi.object({
+      id: Joi.number().allow(null),
       name: Joi.string(),
       companyName: Joi.string().allow(null, ''),
       phoneNumber: Joi.string().pattern(

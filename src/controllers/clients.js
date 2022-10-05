@@ -29,6 +29,7 @@ module.exports = {
       }
 
       res.send({
+        id: item.id,
         name: item.name,
         companyName: item.companyName,
       });

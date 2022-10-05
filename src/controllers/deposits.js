@@ -36,31 +36,15 @@ module.exports = {
   async create (req, res) {
     try {
       console.log(req.body);
-      const {name, companyName, phoneNumber, email} = req.body.client;
+      const {id, name, companyName, phoneNumber, email} = req.body.client;
 
       //find client
-      const clients = await sequelize.query(`
-        select id
-        from Clients
-        where (
-          phoneNumber = :phoneNumber or (
-            email = :email and
-            email != '' and
-            email is not null
-          )
-        )
-      `, {
-        type: QueryTypes.SELECT,
-        replacements: {
-          phoneNumber: [phoneNumber],
-          email: [email],
-        },
-      });
-
-      let [client] = clients;
+      let client = await Client.findOne({
+        where: { id: id }
+      })
 
       // create client
-      if (client === undefined) {
+      if (!client) {
         client = await Client.create({
           name,
           companyName,
@@ -68,6 +52,8 @@ module.exports = {
           email,
         });
       }
+
+      console.log('client', client);
 
       //get current month directory
       const directory = await directoriesController.getDirectory();

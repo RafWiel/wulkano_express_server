@@ -14,7 +14,7 @@ module.exports = {
     user: process.env.DB_USER || 'admin',
     password: process.env.DB_PASSWORD || 'admin',
     options: {
-      dialect: process.env.DIALECT || 'mysql',
+      dialect: 'mysql',
       host: process.env.HOST || 'localhost',
     },
   },
