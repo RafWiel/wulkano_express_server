@@ -113,3 +113,6 @@ signatures
 #dist directory
 dist
 
+#config directory
+config
+
