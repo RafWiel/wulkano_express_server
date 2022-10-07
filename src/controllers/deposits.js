@@ -36,14 +36,19 @@ module.exports = {
   async create (req, res) {
     try {
       console.log(req.body);
-      const {id, name, companyName, phoneNumber, email} = req.body.client;
+      const { name, companyName, phoneNumber, email } = req.body.client;
 
       //find client
       let client = await Client.findOne({
-        where: { id: id }
-      })
+        where: {
+          name: name,
+          companyName: companyName,
+          phoneNumber: phoneNumber,
+          email: email,
+        }
+      });
 
-      // create client
+      // create new client
       if (!client) {
         client = await Client.create({
           name,
@@ -52,8 +57,6 @@ module.exports = {
           email,
         });
       }
-
-      console.log('client', client);
 
       //get current month directory
       const directory = await directoriesController.getDirectory();

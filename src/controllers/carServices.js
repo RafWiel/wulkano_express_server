@@ -42,34 +42,21 @@ module.exports = {
   async create (req, res) {
     try {
       console.log(req.body);
-      const {name, companyName, phoneNumber, email} = req.body.client;
+      const { name, phoneNumber, email } = req.body.client;
 
       //find client
-      const clients = await sequelize.query(`
-        select id
-        from Clients
-        where (
-          phoneNumber = :phoneNumber or (
-            email = :email and
-            email != '' and
-            email is not null
-          )
-        )
-      `, {
-        type: QueryTypes.SELECT,
-        replacements: {
-          phoneNumber: [phoneNumber],
-          email: [email],
-        },
+      let client = await Client.findOne({
+        where: {
+          name: name,
+          phoneNumber: phoneNumber,
+          email: email,
+        }
       });
 
-      let [client] = clients;
-
-      // create client
-      if (client === undefined) {
+      // create new client
+      if (!client) {
         client = await Client.create({
           name,
-          companyName,
           phoneNumber,
           email,
         });

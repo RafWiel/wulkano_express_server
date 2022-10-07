@@ -85,5 +85,4 @@ module.exports = {
 
     res.send({ result: false });
   },
-
 }

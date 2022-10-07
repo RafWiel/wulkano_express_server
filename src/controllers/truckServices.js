@@ -58,35 +58,21 @@ module.exports = {
   async create (req, res) {
     try {
       console.log(req.body);
-      const {name, taxId, phoneNumber, email, city} = req.body.company;
+      const { name, taxId, phoneNumber, email, city } = req.body.company;
 
       //find company
-      const companies = await sequelize.query(`
-        select id
-        from Companies
-        where (
-          name = :name or
-          taxId = :taxId or
-          phoneNumber = :phoneNumber or (
-            email = :email and
-            email != '' and
-            email is not null
-          )
-        )
-      `, {
-        type: QueryTypes.SELECT,
-        replacements: {
-          name: [name],
-          taxId: [taxId],
-          phoneNumber: [phoneNumber],
-          email: [email],
-        },
+      let company = await Company.findOne({
+        where: {
+          name: name,
+          taxId: taxId,
+          phoneNumber: phoneNumber,
+          email: email,
+          city: city
+        }
       });
 
-      let [company] = companies;
-
-      // create company
-      if (company === undefined) {
+      // create new company
+      if (!company) {
         company = await Company.create({
           name,
           taxId,
