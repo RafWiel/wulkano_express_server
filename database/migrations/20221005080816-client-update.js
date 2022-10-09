@@ -20,6 +20,7 @@ module.exports = {
         transaction
       });
 
+      await queryInterface.removeConstraint('Clients', 'phoneNumber');
       await queryInterface.removeConstraint('Clients', 'email');
 
       await transaction.commit();
@@ -35,6 +36,7 @@ module.exports = {
       await queryInterface.changeColumn('Clients', 'phoneNumber', {
         type: Sequelize.STRING,
         allowNull: false,
+        unique: true,
       }, {
         transaction
       });
