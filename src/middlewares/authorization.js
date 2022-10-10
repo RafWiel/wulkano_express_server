@@ -5,11 +5,13 @@ const jwt = require('jsonwebtoken');
 module.exports = {
   filter (req, res, next) {
     const token = req.headers['authorization']?.split(' ')[1];
-    if (!token) {
-      return tools.sendAuthorizationError(res);
+    if (!token) return tools.sendAuthorizationError(res);
+    if (process.env.NODE_ENV === 'development') {
+      next();
+      return;
     }
 
-    //console.log('Auth token:', token);
+    console.log('process.env.NODE_ENV:', process.env.NODE_ENV);
 
     jwt.verify(token, config.authentication.jwtSecret, (error) => {
       if (error) {
