@@ -5,7 +5,6 @@ const {User} = require('../models');
 
 module.exports = {
   async login (req, res) {
-    console.log(req.body);
     const {userName, password} = req.body;
 
     if (!userName || !password) {

@@ -41,7 +41,6 @@ async function createTires(request, type, array) {
 module.exports = {
   async create (req, res) {
     try {
-      console.log(req.body);
       const { name, phoneNumber, email } = req.body.client;
 
       //find client
@@ -233,8 +232,6 @@ module.exports = {
   },
   async update (req, res) {
     try {
-      console.log(req.body);
-
       const {id, saleDocument} = req.body;
 
       CarService.update(

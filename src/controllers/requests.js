@@ -11,9 +11,6 @@ module.exports = {
     try {
       const page = req.query.page || 1;
 
-      console.log('page', page);
-      console.log('query', req.query);
-
       // sorting columns
       const sortColumns = ['date', 'requestName', 'clientName', 'companyName', 'phoneNumber', 'requestType'];
       const sortColumn = req.query['sort-column'] ? sortColumns[req.query['sort-column']] : 'date';
@@ -59,8 +56,6 @@ module.exports = {
           break;
       }
 
-      console.log('type');
-      console.log(req.query.type == requestType.all);
       // run query
       sequelize.query(`
         select

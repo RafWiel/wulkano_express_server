@@ -78,7 +78,6 @@ module.exports = {
     .catch((error) => tools.sendError(res, error));
   },
   getFirst (req, res) {
-    console.log('query', req.query);
     if (req.query.name) return getFirstByName(req, res);
     if (req.query['company-name']) return getFirstByCompanyName(req, res);
     if (req.query['phone-number']) return getFirstByPhoneNumber(req, res);

@@ -35,7 +35,6 @@ async function createTires(request, array) {
 module.exports = {
   async create (req, res) {
     try {
-      console.log(req.body);
       const { name, companyName, phoneNumber, email } = req.body.client;
 
       //find client

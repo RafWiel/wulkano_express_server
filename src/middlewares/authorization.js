@@ -11,8 +11,6 @@ module.exports = {
       return;
     }
 
-    console.log('process.env.NODE_ENV:', process.env.NODE_ENV);
-
     jwt.verify(token, config.authentication.jwtSecret, (error) => {
       if (error) {
         return tools.sendAuthorizationError(res, error);

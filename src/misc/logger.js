@@ -14,30 +14,43 @@ const level = () => {
   return isDevelopment ? 'debug' : 'warn'
 }
 
+console.log('LEVEL', level());
+
 winston.addColors( {
   error: 'red',
-  warn: 'orange',
+  warn: 'yellow',
   info: 'green',
   http: 'magenta',
-  debug: 'yellow',
+  debug: 'green',
 });
 
 const format = winston.format.combine(
   winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-  winston.format.colorize({ all: true }),
   winston.format.printf(
     (info) => `${info.timestamp} ${info.level}: ${info.message}`,
   ),
 )
-
 const transports = [
-  new winston.transports.Console(),
-  new winston.transports.File({
-    filename: 'logs/error.log',
-    level: 'error',
+  new winston.transports.Console({
+    format: winston.format.combine(
+      winston.format.colorize({ all: true }),
+      winston.format.printf(
+        (info) => `${info.timestamp} SERVER: ${info.message}`,
+      )
+    )
   }),
-  new winston.transports.File({ filename: 'logs/all.log' }),
-]
+  new winston.transports.File({
+    filename: 'logs/server.log',
+    maxsize:'1000000',
+    maxFiles:'10',
+    level: 'warn',
+  }),
+  new winston.transports.File({
+    filename: 'logs/server_all.log',
+    maxsize:'1000000',
+    maxFiles:'10',
+  }),
+];
 
 const logger = winston.createLogger({
   level: level(),
@@ -46,4 +59,36 @@ const logger = winston.createLogger({
   transports,
 });
 
-module.exports = logger
+const clientTransports = [
+  new winston.transports.Console({
+    format: winston.format.combine(
+      winston.format.colorize({ all: true }),
+      winston.format.printf(
+        (info) => `${info.timestamp} CLIENT: ${info.message}`,
+      )
+    )
+  }),
+  new winston.transports.File({
+    filename: 'logs/client.log',
+    maxsize:'1000000',
+    maxFiles:'10',
+    level: 'warn',
+  }),
+  new winston.transports.File({
+    filename: 'logs/client_all.log',
+    maxsize:'1000000',
+    maxFiles:'10',
+  }),
+]
+
+const clientLogger = winston.createLogger({
+  level: level(),
+  levels,
+  format,
+  transports: clientTransports,
+});
+
+module.exports = {
+  logger,
+  clientLogger
+}

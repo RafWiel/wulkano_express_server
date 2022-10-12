@@ -2,14 +2,13 @@ const dotenv = require('dotenv');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-//const logger = require('morgan');
 const config = require('./config/config');
 const {sequelize} = require('./models');
 const fs = require('fs');
 const path = require('path');
 const helmet = require("helmet");
 const morganMiddleware = require("./middlewares/logger");
-const logger = require("./misc/logger");
+const {logger} = require("./misc/logger");
 
 if (process.pkg) {
   const envPath = path.join(__dirname, '../.env.production');
@@ -19,7 +18,6 @@ else dotenv.config();
 
 const app = express();
 app.use(cors());
-//app.use(logger('combined'));
 app.use(bodyParser.json());
 app.use(helmet());
 app.use(morganMiddleware);

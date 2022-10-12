@@ -57,7 +57,6 @@ async function createMechanics(request, array) {
 module.exports = {
   async create (req, res) {
     try {
-      console.log(req.body);
       const { name, taxId, phoneNumber, email, city } = req.body.company;
 
       //find company
@@ -244,8 +243,6 @@ module.exports = {
   },
   async update (req, res) {
     try {
-      console.log(req.body);
-
       const {id, saleDocument} = req.body;
 
       TruckService.update(
