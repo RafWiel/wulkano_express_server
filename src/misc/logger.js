@@ -14,8 +14,6 @@ const level = () => {
   return isDevelopment ? 'debug' : 'warn'
 }
 
-console.log('LEVEL', level());
-
 winston.addColors( {
   error: 'red',
   warn: 'yellow',
