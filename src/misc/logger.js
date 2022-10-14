@@ -39,15 +39,15 @@ const transports = [
   }),
   new winston.transports.File({
     filename: 'logs/server.log',
-    maxsize:'1000000',
+    maxsize:'1024000',
     maxFiles:'10',
     level: 'warn',
   }),
-  new winston.transports.File({
-    filename: 'logs/server_all.log',
-    maxsize:'1000000',
-    maxFiles:'10',
-  }),
+  // new winston.transports.File({
+  //   filename: 'logs/server_all.log',
+  //   maxsize:'1000000',
+  //   maxFiles:'10',
+  // }),
 ];
 
 const logger = winston.createLogger({
@@ -68,15 +68,15 @@ const clientTransports = [
   }),
   new winston.transports.File({
     filename: 'logs/client.log',
-    maxsize:'1000000',
+    maxsize:'1024000',
     maxFiles:'10',
     level: 'warn',
   }),
-  new winston.transports.File({
-    filename: 'logs/client_all.log',
-    maxsize:'1000000',
-    maxFiles:'10',
-  }),
+  // new winston.transports.File({
+  //   filename: 'logs/client_all.log',
+  //   maxsize:'1000000',
+  //   maxFiles:'10',
+  // }),
 ]
 
 const clientLogger = winston.createLogger({
