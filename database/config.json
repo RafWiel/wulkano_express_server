@@ -1,7 +1,7 @@
 {
   "development": {
-    "username": "admin",
-    "password": "admin",
+    "username": "dev",
+    "password": "dev",
     "database": "Wulkano",
     "host": "127.0.0.1",
     "dialect": "mysql"
