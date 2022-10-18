@@ -16,10 +16,10 @@ module.exports = {
           lastName: req.body.lastName,
           isAccountManager: req.body.isAccountManager,
         })
-        .then((user) => {
+        .then(() => {
           res.send({
             result: true,
-            user, //todo: usun
+            // user, 
           });
         })
         .catch((error) => tools.sendError(res, error));
