@@ -1,2 +1,2 @@
-cd ~/Projekty/Wulkano/wulkano_express_server
+cd ~/Projekty/Wulkano/express_server
 npm run local
