@@ -5,22 +5,19 @@ module.exports = (sequelize, DataTypes) =>
       allowNull: false,
     },
     taxId: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(16),
       allowNull: false,
-      unique: true,
     },
     phoneNumber: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(16),
       allowNull: false,
-      unique: true,
     },
     email: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(32),
       allowNull: true,
-      unique: true,
     },
     city: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(32),
       allowNull: false,
     },
   }, {

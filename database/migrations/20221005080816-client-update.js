@@ -16,6 +16,7 @@ module.exports = {
       await queryInterface.changeColumn('Clients', 'email', {
         type: Sequelize.STRING(32),
         allowNull: true,
+        unique: false,
       }, {
         transaction
       });

@@ -9,6 +9,7 @@ module.exports = {
       await queryInterface.changeColumn('Companies', 'taxId', {
         type: Sequelize.STRING(16),
         allowNull: false,
+        unique: false,
       }, {
         transaction
       });
@@ -16,6 +17,7 @@ module.exports = {
       await queryInterface.changeColumn('Companies', 'phoneNumber', {
         type: Sequelize.STRING(16),
         allowNull: false,
+        unique: false,
       }, {
         transaction
       });
@@ -23,6 +25,7 @@ module.exports = {
       await queryInterface.changeColumn('Companies', 'email', {
         type: Sequelize.STRING(32),
         allowNull: true,
+        unique: false,
       }, {
         transaction
       });
